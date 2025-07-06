@@ -3,56 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة المعدل - جامعة العلوم الصحية</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <title>حاسبة معدل الطالب</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>جامعة العلوم الصحية</h1>
-            <p>حاسبة المعدل لطلاب السنة الأولى (2025)</p>
-        </header>
+        <h1>حاسبة معدل الطالب</h1>
+        <p class="subtitle">هذه الصفحة خاصة لطلاب جامعة العلوم الصحية - السنة الأولى 2025</p>
 
-        <main>
-            <section id="stage-coro-input">
-                <div class="card">
-                    <div class="card-header">الخطوة الأولى: المعلومات الأساسية</div>
-                    <div class="card-body">
-                        <div class="input-grid">
-                            <div class="input-group">
-                                <label for="studentName">اسم الطالب</label>
-                                <input type="text" id="studentName" placeholder="الاسم الكامل">
-                            </div>
-                            <div class="input-group">
-                                <label for="studentId">رقم الطالب</label>
-                                <input type="text" id="studentId" placeholder="الرقم الجامعي">
-                            </div>
-                        </div>
-                        <hr>
-                        <p class="instruction">أدخل درجات الكورولات الأربعة (من 100):</p>
-                        <div class="input-grid">
-                            <input type="number" id="coro1" min="0" max="100" placeholder="كورول 1">
-                            <input type="number" id="coro2" min="0" max="100" placeholder="كورول 2">
-                            <input type="number" id="coro3" min="0" max="100" placeholder="كورول 3">
-                            <input type="number" id="coro4" min="0" max="100" placeholder="كورول 4">
-                        </div>
-                        <button id="calculateCoroBtn" class="btn btn-primary">احسب نتيجة الكورولات</button>
+        <div class="calculator-body">
+            <fieldset>
+                <legend>أولاً: أدخل درجات الكورولات</legend>
+                <div class="grades-grid">
+                    <div class="input-group">
+                        <label for="coro1">كورول 1:</label>
+                        <input type="number" id="coro1" min="0" max="100" class="grade-input">
+                    </div>
+                    <div class="input-group">
+                        <label for="coro2">كورول 2:</label>
+                        <input type="number" id="coro2" min="0" max="100" class="grade-input">
+                    </div>
+                    <div class="input-group">
+                        <label for="coro3">كورول 3:</label>
+                        <input type="number" id="coro3" min="0" max="100" class="grade-input">
+                    </div>
+                    <div class="input-group">
+                        <label for="coro4">كورول 4:</label>
+                        <input type="number" id="coro4" min="0" max="100" class="grade-input">
                     </div>
                 </div>
-            </section>
+            </fieldset>
 
-            <section id="stage-results" class="hidden">
-                </section>
-        </main>
+            <div id="coroResult" class="result-section"></div>
+            
+            <fieldset id="finalExamSection" class="hidden">
+                <legend>ثانياً: أدخل درجة الفاينال</legend>
+                <div class="input-group">
+                    <label for="finalGrade">درجة الفاينال:</label>
+                    <input type="number" id="finalGrade" min="0" max="100" class="grade-input">
+                </div>
+            </fieldset>
 
-        <footer>
-            <p>تم تصميم هذه الصفحة بواسطة الطالب خلدون الحمدو</p>
-            <button id="resetBtn" class="btn btn-secondary hidden">البدء من جديد</button>
-        </footer>
+            <div id="finalResult" class="result-section"></div>
+            
+            <fieldset id="buttonlemaExamSection" class="hidden">
+                <legend>ثالثاً: أدخل درجة البوتونليما</legend>
+                <div class="input-group">
+                    <label for="buttonlemaGrade">درجة البوتونليما:</label>
+                    <input type="number" id="buttonlemaGrade" min="0" max="100" class="grade-input">
+                </div>
+            </fieldset>
+
+            <div id="buttonlemaResult" class="result-section"></div>
+            
+            <div class="button-group">
+                <button id="resetBtn">إعادة تعيين</button>
+            </div>
+        </div>
     </div>
+
+    <footer>
+        تم تصميم هذه الصفحة بواسطة الطالب خلدون الحمدو
+    </footer>
 
     <script src="script.js"></script>
 </body>
