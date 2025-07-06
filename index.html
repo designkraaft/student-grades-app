@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام حساب درجات الطلاب</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>برنامج إدارة درجات الطلاب</h1>
+
+        <div class="form-container">
+            <fieldset>
+                <legend>معلومات الطالب</legend>
+                <div class="input-group">
+                    <label for="studentName">اسم الطالب:</label>
+                    <input type="text" id="studentName" required>
+                </div>
+                <div class="input-group">
+                    <label for="studentId">رقم الطالب:</label>
+                    <input type="text" id="studentId" required>
+                    <input type="hidden" id="studentIndex"> </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>درجات الكورولات (من 100)</legend>
+                <div class="grades-grid">
+                    <div class="input-group">
+                        <label for="coro1">كورول 1:</label>
+                        <input type="number" id="coro1" min="0" max="100" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="coro2">كورول 2:</label>
+                        <input type="number" id="coro2" min="0" max="100" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="coro3">كورول 3:</label>
+                        <input type="number" id="coro3" min="0" max="100" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="coro4">كورول 4:</label>
+                        <input type="number" id="coro4" min="0" max="100" required>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>الامتحانات الإضافية</legend>
+                <div class="grades-grid">
+                    <div class="input-group">
+                        <label for="finalGrade">درجة الفاينال:</label>
+                        <input type="number" id="finalGrade" min="0" max="100">
+                    </div>
+                    <div class="input-group">
+                        <label for="buttonlemaGrade">درجة البوتونليما:</label>
+                        <input type="number" id="buttonlemaGrade" min="0" max="100">
+                    </div>
+                </div>
+            </fieldset>
+            
+            <div class="button-group">
+                <button id="calculateBtn" class="btn-primary">حساب النتيجة / حفظ</button>
+                <button id="resetBtn" class="btn-secondary">مسح الحقول</button>
+            </div>
+            
+            <div id="results" class="results-box">النتائج ستظهر هنا...</div>
+        </div>
+        
+        <div class="table-container">
+            <h2>بيانات الطلاب المحفوظة</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>اسم الطالب</th>
+                        <th>رقم الطالب</th>
+                        <th>متوسط الكورولات</th>
+                        <th>الحالة النهائية</th>
+                        <th>المعدل النهائي</th>
+                        <th>إجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="studentTableBody">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
