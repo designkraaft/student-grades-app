@@ -13,7 +13,16 @@
 
         <div class="calculator-body">
             <fieldset>
-                <legend>أولاً: أدخل درجات الكورولات</legend>
+                <legend>أولاً: أدخل رقم الطالب</legend>
+                <div class="input-group">
+                    <label for="studentId">رقم الطالب:</label>
+                    <input type="text" id="studentId" class="grade-input" placeholder="أدخل رقم الطالب">
+                    <button id="loadBtn">تحميل البيانات</button>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>ثانياً: أدخل درجات الكورولات</legend>
                 <div class="grades-grid">
                     <div class="input-group">
                         <label for="coro1">كورول 1:</label>
@@ -45,7 +54,7 @@
             <div id="coroResult" class="result-section"></div>
             
             <fieldset id="finalExamSection" class="hidden">
-                <legend>ثانياً: أدخل درجة الفاينال</legend>
+                <legend>ثالثاً: أدخل درجة الفاينال</legend>
                 <div class="input-group">
                     <label for="finalGrade">درجة الفاينال:</label>
                     <input type="number" id="finalGrade" min="0" max="100" class="grade-input">
@@ -55,7 +64,7 @@
             <div id="finalResult" class="result-section"></div>
             
             <fieldset id="buttonlemaExamSection" class="hidden">
-                <legend>ثالثاً: أدخل درجة البوتونليما</legend>
+                <legend>رابعاً: أدخل درجة البوتونليما</legend>
                 <div class="input-group">
                     <label for="buttonlemaGrade">درجة البوتونليما:</label>
                     <input type="number" id="buttonlemaGrade" min="0" max="100" class="grade-input">
