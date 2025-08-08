@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- DOM Elements ---
-    const studentIdInput = document.getElementById('studentId');
     const gradeInputs = document.querySelectorAll('.grade-input');
     const resetBtn = document.getElementById('resetBtn');
-    const loadBtn = document.getElementById('loadBtn');
 
     const coroResultEl = document.getElementById('coroResult');
     const finalResultEl = document.getElementById('finalResult');
@@ -13,48 +11,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const finalExamSection = document.getElementById('finalExamSection');
     const buttonlemaExamSection = document.getElementById('buttonlemaExamSection');
 
-    // --- Local Storage Functions ---
-    const saveGrades = () => {
-        const studentId = studentIdInput.value;
-        if (!studentId) return;
-
-        const grades = {};
-        gradeInputs.forEach(input => {
-            if (input.id.startsWith('coro')) {
-                grades[input.id] = input.value;
-            }
-        });
-        localStorage.setItem(`grades_${studentId}`, JSON.stringify(grades));
-    };
-
-    const loadGrades = () => {
-        const studentId = studentIdInput.value;
-        if (!studentId) return;
-
-        const savedGrades = localStorage.getItem(`grades_${studentId}`);
-        if (savedGrades) {
-            const grades = JSON.parse(savedGrades);
-            for (const coroId in grades) {
-                const input = document.getElementById(coroId);
-                if (input) {
-                    input.value = grades[coroId];
-                }
-            }
-            calculateResults();
-        }
-    };
-
     // --- Main Calculation Function ---
     const calculateResults = () => {
+        // --- Reset all results before calculating ---
         resetResultSections();
-        
+
+        // --- Coro Calculation ---
         const coroInputs = [
             document.getElementById('coro1'), document.getElementById('coro2'),
             document.getElementById('coro3'), document.getElementById('coro4'),
+            // الإضافة الجديدة للكورولات 5 و 6
             document.getElementById('coro5'), document.getElementById('coro6')
         ];
         const coroGrades = coroInputs.map(input => parseFloat(input.value));
-        if (coroGrades.some(isNaN) || coroGrades.length < 6) return;
+        if (coroGrades.some(isNaN) || coroGrades.length < 6) return; // Stop if not all coro grades are entered
 
         const averageCoro = coroGrades.reduce((sum, grade) => sum + grade, 0) / coroGrades.length;
         coroResultEl.style.display = 'block';
@@ -67,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // --- Final Exam Calculation ---
         finalExamSection.classList.remove('hidden');
         const minFinalGrade = (60 - (0.60 * averageCoro)) / 0.40;
         
@@ -79,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         coroResultEl.innerHTML += `<br>أنت بحاجة لفاينال. أقل درجة مطلوبة للنجاح هي: <strong>${minFinalGrade.toFixed(2)}</strong>`;
 
         const finalGrade = parseFloat(document.getElementById('finalGrade').value);
-        if (isNaN(finalGrade)) return;
+        if (isNaN(finalGrade)) return; // Stop if final grade is not entered
 
         const finalCombined = (0.60 * averageCoro) + (0.40 * finalGrade);
         finalResultEl.style.display = 'block';
@@ -90,15 +61,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // --- Buttonlema Calculation ---
         finalResultEl.className = 'result-section fail';
         finalResultEl.innerHTML = `معدلك بعد الفاينال هو: <strong>${finalCombined.toFixed(2)}</strong>. للأسف لم تنجح.`;
         
         buttonlemaExamSection.classList.remove('hidden');
-        const minButtonlemaGrade = minFinalGrade;
+        const minButtonlemaGrade = minFinalGrade; // It's the same required grade
         finalResultEl.innerHTML += `<br>أنت بحاجة لبوتونليما. أقل درجة مطلوبة للنجاح هي: <strong>${minButtonlemaGrade.toFixed(2)}</strong>`;
 
         const buttonlemaGrade = parseFloat(document.getElementById('buttonlemaGrade').value);
-        if (isNaN(buttonlemaGrade)) return;
+        if (isNaN(buttonlemaGrade)) return; // Stop if buttonlema grade is not entered
 
         const buttonlemaCombined = (0.60 * averageCoro) + (0.40 * buttonlemaGrade);
         buttonlemaResultEl.style.display = 'block';
@@ -124,19 +96,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const resetAll = () => {
         gradeInputs.forEach(input => input.value = '');
-        studentIdInput.value = '';
         resetResultSections();
     };
 
     // --- Event Listeners ---
-    gradeInputs.forEach(input => input.addEventListener('input', () => {
-        calculateResults();
-        saveGrades(); // Save grades every time an input changes
-    }));
-    studentIdInput.addEventListener('input', () => {
-        // Option to auto-load when student ID is entered
-        // loadGrades();
-    });
-    loadBtn.addEventListener('click', loadGrades);
+    gradeInputs.forEach(input => input.addEventListener('input', calculateResults));
     resetBtn.addEventListener('click', resetAll);
 });
