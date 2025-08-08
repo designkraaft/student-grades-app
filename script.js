@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const coroInputs = [
             document.getElementById('coro1'), document.getElementById('coro2'),
             document.getElementById('coro3'), document.getElementById('coro4'),
-            // الإضافة الجديدة للكورولات 5 و 6
             document.getElementById('coro5'), document.getElementById('coro6')
         ];
         const coroGrades = coroInputs.map(input => parseFloat(input.value));
