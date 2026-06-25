@@ -3,69 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حساب معدل الطالب - جامعة العلوم الصحية (الراعي)</title>
-    <link rel="stylesheet" href="style.css">
+    <title>حساب معدل الطالب - نظام الكورولات</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1d3557;
+            margin-bottom: 5px;
+            font-size: 1.8em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #457b9d;
+            font-size: 1.1em;
+            margin-bottom: 25px;
+        }
+
+        fieldset {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        legend {
+            font-weight: bold;
+            color: #1d3557;
+            padding: 0 10px;
+            font-size: 1.2em;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .input-group input[type="number"], .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1.1em;
+            text-align: center;
+            font-family: inherit;
+        }
+
+        .input-group select {
+            cursor: pointer;
+            background-color: #f8f9fa;
+        }
+
+        .grades-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .button-group {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        #resetBtn {
+            flex-grow: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #6c757d;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        #resetBtn:hover {
+            background-color: #5a6268;
+        }
+
+        .result-section {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 1.2em;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+
+        .result-section.info {
+            background-color: #e2f0fb;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .result-section.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .result-section.fail {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #6c757d;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>حساب معدل الطالب - جامعة العلوم الصحية (الراعي)</h1>
-        <p class="subtitle">هذه الصفحة خاصة لطلاب جامعة العلوم الصحية - السنة الثانية 2025-2026</p>
+        <h1>حساب معدل الطالب الشامل</h1>
+        <p class="subtitle">أداة مخصصة لطلاب الطب لحساب المعدلات بناءً على عدد الكورولات</p>
 
         <div class="calculator-body">
+            <!-- قسم اختيار عدد الكورولات -->
+            <fieldset>
+                <legend>إعدادات السنة الدراسية</legend>
+                <div class="input-group">
+                    <label for="kurulCount">اختر عدد الكورولات في سنتك الدراسية:</label>
+                    <select id="kurulCount">
+                        <option value="4">4 كورولات</option>
+                        <option value="5">5 كورولات</option>
+                        <option value="6" selected>6 كورولات</option>
+                        <option value="7">7 كورولات</option>
+                        <option value="8">8 كورولات</option>
+                    </select>
+                </div>
+            </fieldset>
+
+            <!-- قسم إدخال درجات الكورولات (يتم توليده برمجياً) -->
             <fieldset>
                 <legend>أولاً: أدخل درجات الكورولات</legend>
-                <div class="grades-grid">
-                    <div class="input-group">
-                        <label for="coro1">كورول 1:</label>
-                        <input type="number" id="coro1" min="0" max="100" class="grade-input">
-                    </div>
-                    <div class="input-group">
-                        <label for="coro2">كورول 2:</label>
-                        <input type="number" id="coro2" min="0" max="100" class="grade-input">
-                    </div>
-                    <div class="input-group">
-                        <label for="coro3">كورول 3:</label>
-                        <input type="number" id="coro3" min="0" max="100" class="grade-input">
-                    </div>
-                    <div class="input-group">
-                        <label for="coro4">كورول 4:</label>
-                        <input type="number" id="coro4" min="0" max="100" class="grade-input">
-                    </div>
-                    <div class="input-group">
-                        <label for="coro5">كورول 5:</label>
-                        <input type="number" id="coro5" min="0" max="100" class="grade-input">
-                    </div>
-                    <div class="input-group">
-                        <label for="coro6">كورول 6:</label>
-                        <input type="number" id="coro6" min="0" max="100" class="grade-input">
-                    </div>
+                <div id="kurulInputsContainer" class="grades-grid">
+                    <!-- سيتم إضافة الحقول هنا بواسطة الجافاسكربت -->
                 </div>
             </fieldset>
 
             <div id="coroResult" class="result-section"></div>
             
+            <!-- قسم الفاينال -->
             <fieldset id="finalExamSection" class="hidden">
                 <legend>ثانياً: أدخل درجة الفاينال</legend>
                 <div class="input-group">
                     <label for="finalGrade">درجة الفاينال:</label>
-                    <input type="number" id="finalGrade" min="0" max="100" class="grade-input">
+                    <input type="number" id="finalGrade" min="0" max="100" class="grade-input final-input">
                 </div>
             </fieldset>
 
             <div id="finalResult" class="result-section"></div>
             
+            <!-- قسم البوتونليما -->
             <fieldset id="buttonlemaExamSection" class="hidden">
                 <legend>ثالثاً: أدخل درجة البوتونليما</legend>
                 <div class="input-group">
                     <label for="buttonlemaGrade">درجة البوتونليما:</label>
-                    <input type="number" id="buttonlemaGrade" min="0" max="100" class="grade-input">
+                    <input type="number" id="buttonlemaGrade" min="0" max="100" class="grade-input btn-input">
                 </div>
             </fieldset>
 
             <div id="buttonlemaResult" class="result-section"></div>
             
             <div class="button-group">
-                <button id="resetBtn">إعادة تعيين</button>
+                <button id="resetBtn">إعادة تعيين وبدء من جديد</button>
             </div>
         </div>
     </div>
@@ -74,7 +208,156 @@
         تم تصميم هذه الصفحة بواسطة الطالب خلدون الحمدو
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // عناصر الواجهة الأساسية
+            const kurulCountSelect = document.getElementById('kurulCount');
+            const kurulInputsContainer = document.getElementById('kurulInputsContainer');
+            const resetBtn = document.getElementById('resetBtn');
+
+            const coroResultEl = document.getElementById('coroResult');
+            const finalResultEl = document.getElementById('finalResult');
+            const buttonlemaResultEl = document.getElementById('buttonlemaResult');
+            
+            const finalExamSection = document.getElementById('finalExamSection');
+            const buttonlemaExamSection = document.getElementById('buttonlemaExamSection');
+            
+            const finalGradeInput = document.getElementById('finalGrade');
+            const buttonlemaGradeInput = document.getElementById('buttonlemaGrade');
+
+            // دالة لتوليد حقول الكورولات بناءً على العدد المختار
+            const generateKurulInputs = () => {
+                const count = parseInt(kurulCountSelect.value);
+                kurulInputsContainer.innerHTML = ''; // مسح الحقول القديمة
+                
+                for (let i = 1; i <= count; i++) {
+                    const div = document.createElement('div');
+                    div.className = 'input-group';
+                    div.innerHTML = `
+                        <label for="coro${i}">كورول ${i}:</label>
+                        <input type="number" id="coro${i}" min="0" max="100" class="grade-input kurul-input">
+                    `;
+                    kurulInputsContainer.appendChild(div);
+                }
+
+                // إعادة ربط أحداث الإدخال بالحقول الجديدة
+                document.querySelectorAll('.kurul-input').forEach(input => {
+                    input.addEventListener('input', calculateResults);
+                });
+                
+                // إعادة الحساب عند تغيير عدد الكورولات
+                calculateResults();
+            };
+
+            // الدالة الرئيسية للحساب
+            const calculateResults = () => {
+                resetResultSections(); // إخفاء النتائج قبل بدء حساب جديد
+
+                // جلب جميع حقول الكورولات الحالية
+                const kurulInputs = Array.from(document.querySelectorAll('.kurul-input'));
+                const coroGrades = kurulInputs.map(input => parseFloat(input.value));
+                
+                // التحقق من إدخال جميع درجات الكورولات المطلوبة للسنة المحددة
+                if (coroGrades.some(isNaN)) return;
+
+                // حساب المتوسط بناءً على عدد الكورولات المختار
+                const averageCoro = coroGrades.reduce((sum, grade) => sum + grade, 0) / coroGrades.length;
+                
+                coroResultEl.style.display = 'block';
+                coroResultEl.className = 'result-section info';
+                coroResultEl.innerHTML = `متوسط الكورولات: <strong>${averageCoro.toFixed(2)}</strong>`;
+                
+                // الإعفاء من الفاينال
+                if (averageCoro >= 80) {
+                    coroResultEl.className = 'result-section success';
+                    coroResultEl.innerHTML += `<br><strong>النتيجة: ناجح (إعفاء)</strong> لا تحتاج لفاينال.`;
+                    return;
+                }
+
+                // حساب متطلبات الفاينال
+                finalExamSection.classList.remove('hidden');
+                const minFinalGrade = (60 - (0.60 * averageCoro)) / 0.40;
+                
+                if (minFinalGrade > 100) {
+                    coroResultEl.className = 'result-section fail';
+                    coroResultEl.innerHTML += `<br>تحتاج لدرجة ${minFinalGrade.toFixed(2)} في الفاينال، وهذا يتجاوز الـ 100. <strong>النتيجة: راسب في الفاينال مسبقاً</strong>.`;
+                    // نظهر البوتونليما مباشرة لأنه سيعتمد عليها
+                    showButtonlema(minFinalGrade, averageCoro);
+                    return;
+                }
+
+                coroResultEl.innerHTML += `<br>أنت بحاجة لفاينال. أقل درجة مطلوبة للنجاح هي: <strong>${minFinalGrade.toFixed(2)}</strong>`;
+
+                // إذا أدخل الطالب درجة الفاينال
+                const finalGrade = parseFloat(finalGradeInput.value);
+                if (isNaN(finalGrade)) return; 
+
+                const finalCombined = (0.60 * averageCoro) + (0.40 * finalGrade);
+                finalResultEl.style.display = 'block';
+
+                if (finalCombined >= 60) {
+                    finalResultEl.className = 'result-section success';
+                    finalResultEl.innerHTML = `معدلك النهائي هو: <strong>${finalCombined.toFixed(2)}</strong><br><strong>النتيجة: ناجح</strong>.`;
+                    return;
+                }
+
+                // في حال رسب في الفاينال
+                finalResultEl.className = 'result-section fail';
+                finalResultEl.innerHTML = `معدلك بعد الفاينال هو: <strong>${finalCombined.toFixed(2)}</strong>. للأسف لم تنجح في الفاينال.`;
+                showButtonlema(minFinalGrade, averageCoro);
+            };
+
+            // دالة منفصلة لإظهار وحساب البوتونليما
+            const showButtonlema = (minReqGrade, averageCoro) => {
+                buttonlemaExamSection.classList.remove('hidden');
+                finalResultEl.innerHTML += `<br>أنت بحاجة لبوتونليما. أقل درجة مطلوبة للنجاح هي: <strong>${minReqGrade.toFixed(2)}</strong>`;
+
+                const buttonlemaGrade = parseFloat(buttonlemaGradeInput.value);
+                if (isNaN(buttonlemaGrade)) return;
+
+                const buttonlemaCombined = (0.60 * averageCoro) + (0.40 * buttonlemaGrade);
+                buttonlemaResultEl.style.display = 'block';
+
+                if (buttonlemaCombined >= 60) {
+                    buttonlemaResultEl.className = 'result-section success';
+                    buttonlemaResultEl.innerHTML = `معدلك النهائي بعد البوتونليما هو: <strong>${buttonlemaCombined.toFixed(2)}</strong><br><strong>النتيجة: ناجح</strong>.`;
+                } else {
+                    buttonlemaResultEl.className = 'result-section fail';
+                    buttonlemaResultEl.innerHTML = `معدلك النهائي بعد البوتونليما هو: <strong>${buttonlemaCombined.toFixed(2)}</strong><br><strong>النتيجة: راسب</strong>.`;
+                }
+            };
+
+            // إخفاء وتنظيف النتائج
+            const resetResultSections = () => {
+                [coroResultEl, finalResultEl, buttonlemaResultEl].forEach(el => {
+                    el.style.display = 'none';
+                    el.innerHTML = '';
+                });
+                finalExamSection.classList.add('hidden');
+                buttonlemaExamSection.classList.add('hidden');
+            };
+
+            // زر إعادة التعيين
+            const resetAll = () => {
+                document.querySelectorAll('.grade-input').forEach(input => input.value = '');
+                resetResultSections();
+                finalGradeInput.value = '';
+                buttonlemaGradeInput.value = '';
+            };
+
+            // ربط الأحداث
+            kurulCountSelect.addEventListener('change', () => {
+                resetAll(); // نصفر القيم عند تغيير السنة لتجنب الأخطاء
+                generateKurulInputs();
+            });
+            
+            finalGradeInput.addEventListener('input', calculateResults);
+            buttonlemaGradeInput.addEventListener('input', calculateResults);
+            resetBtn.addEventListener('click', resetAll);
+
+            // توليد الحقول الأولية عند تحميل الصفحة
+            generateKurulInputs();
+        });
+    </script>
 </body>
 </html>
-
