@@ -3,28 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة المعدل الشاملة | كلية الطب البشري</title>
+    <title>حاسبة المعدل التراكمي | كلية الطب البشري</title>
     
-    <!-- استدعاء خط Cairo الاحترافي -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary-color: #0ea5e9; /* أزرق طبي حديث */
+            --primary-color: #0ea5e9; 
             --primary-dark: #0284c7;
             --bg-gradient: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
             --card-bg: #ffffff;
             --text-main: #1e293b;
             --text-muted: #64748b;
             --border-color: #e2e8f0;
+            
+            /* ألوان صناديق الحالات المحدثة */
             --success-bg: #dcfce7;
             --success-text: #166534;
-            --warning-bg: #fef9c3;
-            --warning-text: #854d0e;
-            --danger-bg: #fee2e2;
+            --success-border: #bbf7d0;
+            
+            --warning-bg: #fff7ed;    /* برتقالي محمر دافئ لحالة الخطر/التنبيه للفاينال */
+            --warning-text: #c2410c;
+            --warning-border: #ffedd5;
+            
+            --danger-bg: #fee2e2;     /* أحمر صريح لحالة الرسوب الحتمي */
             --danger-text: #991b1b;
-            --info-bg: #dbeafe;
-            --info-text: #1e40af;
+            --danger-border: #fecaca;
+            
             --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             --radius: 16px;
@@ -169,14 +174,13 @@
             box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
         }
 
-        /* شبكة الكورولات التجاوبية */
         .grades-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
             gap: 1rem;
         }
 
-        /* تنسيق صناديق النتائج */
+        /* تنسيق صناديق النتائج المعدلة */
         .result-box {
             padding: 1.2rem;
             border-radius: 10px;
@@ -188,21 +192,19 @@
             display: none;
         }
 
-        .result-box.info { background: var(--info-bg); color: var(--info-text); border: 1px solid #bfdbfe; }
-        .result-box.success { background: var(--success-bg); color: var(--success-text); border: 1px solid #bbf7d0; }
-        .result-box.warning { background: var(--warning-bg); color: var(--warning-text); border: 1px solid #fef08a; }
-        .result-box.danger { background: var(--danger-bg); color: var(--danger-text); border: 1px solid #fecaca; }
+        .result-box.success { background: var(--success-bg); color: var(--success-text); border: 1px solid var(--success-border); }
+        .result-box.warning { background: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border); }
+        .result-box.danger { background: var(--danger-bg); color: var(--danger-text); border: 1px solid var(--danger-border); }
 
         .result-value {
             font-size: 1.4rem;
             display: inline-block;
             margin: 0 0.2rem;
             padding: 0.1rem 0.5rem;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.6);
             border-radius: 6px;
         }
 
-        /* الحركات الإبداعية */
         .hidden-section {
             opacity: 0;
             max-height: 0;
@@ -256,7 +258,6 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* تحسينات الموبايل */
         @media (max-width: 600px) {
             .header-section { padding: 1.5rem 1rem; }
             h1 { font-size: 1.6rem; }
@@ -269,18 +270,16 @@
 <body>
 
     <div class="main-container">
-        <!-- الرأس الإبداعي -->
         <header class="header-section">
             <h1>حاسبة المعدل التراكمي</h1>
             <div class="university-title">مخصص لكلية الطب البشري - جامعة الراعي</div>
             <div class="turkish-title">Sağlık Bilimleri Üniversitesi - Çobanbey Tıp Fakültesi</div>
             <div class="last-update">
-                🕒 آخر تحديث: 25 يونيو 2026، 10:29 مساءً
+                🕒 آخر تحديث: 25 يونيو 2026، 10:33 مساءً
             </div>
         </header>
 
         <div class="content-section">
-            <!-- إعدادات السنة -->
             <div class="form-group">
                 <div class="section-title">إعدادات السنة الدراسية</div>
                 <label for="kurulCount">كم عدد الكورولات (اللجان) في هذه السنة؟</label>
@@ -293,35 +292,28 @@
                 </select>
             </div>
 
-            <!-- درجات الكورولات -->
             <div class="form-group" id="kurulGroup">
                 <div class="section-title">أولاً: أدخل درجات الكورولات</div>
                 <div id="kurulInputsContainer" class="grades-grid">
-                    <!-- يتم التوليد عبر جافاسكربت -->
-                </div>
+                    </div>
             </div>
 
-            <!-- نتيجة الكورولات -->
             <div id="coroResult" class="result-box"></div>
 
-            <!-- الفاينال -->
             <div id="finalExamSection" class="form-group hidden-section">
                 <div class="section-title">ثانياً: امتحان الفاينال (النهائي)</div>
                 <label for="finalGrade">أدخل الدرجة التي حصلت عليها في الفاينال:</label>
                 <input type="number" id="finalGrade" min="0" max="100" class="grade-input final-input" placeholder="مثال: 75">
             </div>
 
-            <!-- نتيجة الفاينال -->
             <div id="finalResult" class="result-box"></div>
 
-            <!-- البوتونليما -->
             <div id="buttonlemaExamSection" class="form-group hidden-section">
                 <div class="section-title" style="color: #ea580c;">ثالثاً: امتحان البوتونليما (التكميلي)</div>
                 <label for="buttonlemaGrade">أدخل درجة امتحان البوتونليما:</label>
                 <input type="number" id="buttonlemaGrade" min="0" max="100" class="grade-input btn-input" placeholder="أدخل النتيجة هنا">
             </div>
 
-            <!-- نتيجة البوتونليما -->
             <div id="buttonlemaResult" class="result-box"></div>
 
             <button id="resetBtn" class="btn-reset">إعادة تعيين وبدء حساب جديد ↻</button>
@@ -348,7 +340,7 @@
             const finalGradeInput = document.getElementById('finalGrade');
             const buttonlemaGradeInput = document.getElementById('buttonlemaGrade');
 
-            // توليد حقول الكورولات بشكل ديناميكي
+            // دالة بناء حقول الكورولات ديناميكياً
             const generateKurulInputs = () => {
                 const count = parseInt(kurulCountSelect.value);
                 kurulInputsContainer.innerHTML = '';
@@ -369,42 +361,42 @@
                 calculateResults();
             };
 
-            // الحساب الشامل
+            // دالة المعالجة الحسابية الأساسية
             const calculateResults = () => {
                 resetResultSections();
 
                 const kurulInputs = Array.from(document.querySelectorAll('.kurul-input'));
                 const coroGrades = kurulInputs.map(input => parseFloat(input.value));
                 
-                // التأكد من إدخال جميع الكورولات
                 if (coroGrades.some(isNaN)) return;
 
                 const averageCoro = coroGrades.reduce((sum, grade) => sum + grade, 0) / coroGrades.length;
-                
                 coroResultEl.style.display = 'block';
                 
-                // حالة الإعفاء (النجاح بدون فاينال)
+                // حالة الإعفاء الكامل (معدل الكورولات 80 أو أكثر)
                 if (averageCoro >= 80) {
                     coroResultEl.className = 'result-box success';
-                    coroResultEl.innerHTML = `متوسط الكورولات: <span class="result-value">${averageCoro.toFixed(2)}</span><br>🎉 مبروك! النتيجة: <strong>ناجح (إعفاء)</strong> لا تحتاج لدخول الفاينال.`;
+                    coroResultEl.innerHTML = `متوسط الكورولات: <span class="result-value">${averageCoro.toFixed(2)}</span><br>🎉 ممتاز! النتيجة: <strong>ناجح وتستحق الإعفاء</strong>، لا توجد حاجة لدخول الفاينال.`;
                     return;
                 }
 
-                // حساب المعدل المطلوب للفاينال
+                // حساب متطلبات الفاينال بحالة عدم الإعفاء
                 finalExamSection.className = 'form-group visible-section';
                 const minFinalGrade = (60 - (0.60 * averageCoro)) / 0.40;
                 
+                // حالة الرسوب الحتمي قبل الفاينال
                 if (minFinalGrade > 100) {
                     coroResultEl.className = 'result-box danger';
-                    coroResultEl.innerHTML = `متوسط الكورولات: <span class="result-value">${averageCoro.toFixed(2)}</span><br>⚠️ تحتاج لدرجة <span class="result-value">${minFinalGrade.toFixed(2)}</span> في الفاينال وهو غير ممكن. <strong>النتيجة: راسب في الفاينال حكماً</strong>.`;
+                    coroResultEl.innerHTML = `متوسط الكورولات: <span class="result-value">${averageCoro.toFixed(2)}</span><br>❌ حالة حرجة: تحتاج لدرجة <span class="result-value">${minFinalGrade.toFixed(2)}</span> في الفاينال وهذا مستحيل. <strong>أنت راسب حكماً بالفاينال</strong>.`;
                     showButtonlema(minFinalGrade, averageCoro);
                     return;
                 }
 
-                coroResultEl.className = 'result-box info';
-                coroResultEl.innerHTML = `متوسط الكورولات: <span class="result-value">${averageCoro.toFixed(2)}</span><br>أنت بحاجة لدخول الفاينال. أقل درجة للنجاح هي: <span class="result-value">${minFinalGrade.toFixed(2)}</span>`;
+                // تعديل التنبيه ليصبح باللون البرتقالي التحذيري (Warning) ليدل على الخطر وعدم الأمان
+                coroResultEl.className = 'result-box warning';
+                coroResultEl.innerHTML = `متوسط الكورولات: <span class="result-value">${averageCoro.toFixed(2)}</span><br>⚠️ تنبيه: وضعك الحالي غير آمن وبحاجة لدخول الفاينال! أقل درجة مطلوبة للنجاح هي: <span class="result-value">${minFinalGrade.toFixed(2)}</span>`;
 
-                // حساب نتيجة الفاينال إذا تم إدخالها
+                // حساب معدل الفاينال التراكمي في حال الإدخال
                 const finalGrade = parseFloat(finalGradeInput.value);
                 if (isNaN(finalGrade)) return; 
 
@@ -413,20 +405,20 @@
 
                 if (finalCombined >= 60) {
                     finalResultEl.className = 'result-box success';
-                    finalResultEl.innerHTML = `معدلك النهائي: <span class="result-value">${finalCombined.toFixed(2)}</span><br>🎓 <strong>النتيجة: ناجح</strong>.`;
+                    finalResultEl.innerHTML = `معدلك النهائي الحالي: <span class="result-value">${finalCombined.toFixed(2)}</span><br>🎓 <strong>النتيجة: ناجح</strong> بنجاح وتفوق.`;
                     return;
                 }
 
-                // في حال الرسوب بالفاينال
+                // في حال الإخفاق بالفاينال والانتقال للتكميلي
                 finalResultEl.className = 'result-box danger';
-                finalResultEl.innerHTML = `معدلك بعد الفاينال: <span class="result-value">${finalCombined.toFixed(2)}</span><br>للأسف لم تتجاوز الفاينال.`;
+                finalResultEl.innerHTML = `معدلك بعد الفاينال: <span class="result-value">${finalCombined.toFixed(2)}</span><br>للأسف لم تتجاوز عتبة النجاح في الفاينال.`;
                 showButtonlema(minFinalGrade, averageCoro);
             };
 
-            // إظهار وحساب البوتونليما
+            // دالة التحكم في حساب البوتونليما
             const showButtonlema = (minReqGrade, averageCoro) => {
                 buttonlemaExamSection.className = 'form-group visible-section';
-                finalResultEl.innerHTML += `<br>تحتاج لدخول البوتونليما. الدرجة المطلوبة للنجاح: <span class="result-value">${minReqGrade.toFixed(2)}</span>`;
+                finalResultEl.innerHTML += `<br>أنت بحاجة لدخول البوتونليما. الدرجة المطلوبة لإنقاذ العام الدراسي هي: <span class="result-value">${minReqGrade.toFixed(2)}</span>`;
 
                 const buttonlemaGrade = parseFloat(buttonlemaGradeInput.value);
                 if (isNaN(buttonlemaGrade)) return;
@@ -436,10 +428,10 @@
 
                 if (buttonlemaCombined >= 60) {
                     buttonlemaResultEl.className = 'result-box success';
-                    buttonlemaResultEl.innerHTML = `المعدل النهائي بعد البوتونليما: <span class="result-value">${buttonlemaCombined.toFixed(2)}</span><br>🎓 <strong>النتيجة: ناجح</strong>.`;
+                    buttonlemaResultEl.innerHTML = `المعدل النهائي بعد البوتونليما: <span class="result-value">${buttonlemaCombined.toFixed(2)}</span><br>🎓 <strong>النتيجة: ناجح</strong>، تم عبور السنة الدراسية بنجاح!`;
                 } else {
                     buttonlemaResultEl.className = 'result-box danger';
-                    buttonlemaResultEl.innerHTML = `المعدل النهائي بعد البوتونليما: <span class="result-value">${buttonlemaCombined.toFixed(2)}</span><br>❌ <strong>النتيجة: راسب</strong>. حظاً أوفر العام القادم.`;
+                    buttonlemaResultEl.innerHTML = `المعدل النهائي بعد البوتونليما: <span class="result-value">${buttonlemaCombined.toFixed(2)}</span><br>❌ <strong>النتيجة: راسب</strong>. حظاً أوفر في العام القادم.`;
                 }
             };
 
