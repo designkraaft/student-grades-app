@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>حاسبة المعدل التراكمي | كلية الطب البشري</title>
     
-    <!-- استدعاء خط Cairo الاحترافي -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <style>
@@ -18,16 +17,15 @@
             --text-muted: #64748b;
             --border-color: #e2e8f0;
             
-            /* ألوان صناديق الحالات */
             --success-bg: #dcfce7;
             --success-text: #166534;
             --success-border: #bbf7d0;
             
-            --warning-bg: #fff7ed;    /* برتقالي محمر دافئ لحالة الخطر/التنبيه للفاينال */
+            --warning-bg: #fff7ed;    
             --warning-text: #c2410c;
             --warning-border: #ffedd5;
             
-            --danger-bg: #fee2e2;     /* أحمر صريح لحالة الرسوب الحتمي */
+            --danger-bg: #fee2e2;     
             --danger-text: #991b1b;
             --danger-border: #fecaca;
             
@@ -275,7 +273,7 @@
             <div class="university-title">مخصص لكلية الطب البشري - جامعة الراعي</div>
             <div class="turkish-title">Sağlık Bilimleri Üniversitesi - Çobanbey Tıp Fakültesi</div>
             <div class="last-update">
-                🕒 آخر تحديث: 25 يونيو 2026، 10:36 مساءً
+                🕒 آخر تحديث: 25 يونيو 2026، 11:39 مساءً
             </div>
         </header>
 
@@ -295,8 +293,7 @@
             <div class="form-group" id="kurulGroup">
                 <div class="section-title">أولاً: أدخل درجات الكورولات</div>
                 <div id="kurulInputsContainer" class="grades-grid">
-                    <!-- يتم التوليد التلقائي هنا -->
-                </div>
+                    </div>
             </div>
 
             <div id="coroResult" class="result-box"></div>
@@ -304,7 +301,7 @@
             <div id="finalExamSection" class="form-group hidden-section">
                 <div class="section-title">ثانياً: امتحان الفاينال (النهائي)</div>
                 <label for="finalGrade">أدخل الدرجة التي حصلت عليها في الفاينال:</label>
-                <input type="number" id="finalGrade" min="0" max="100" class="grade-input final-input" placeholder="مثال: 75">
+                <input type="number" id="finalGrade" min="0" max="100" class="grade-input final-input" placeholder="0 - 100">
             </div>
 
             <div id="finalResult" class="result-box"></div>
@@ -312,7 +309,7 @@
             <div id="buttonlemaExamSection" class="form-group hidden-section">
                 <div class="section-title" style="color: #ea580c;">ثالثاً: امتحان البوتونليما (التكميلي)</div>
                 <label for="buttonlemaGrade">أدخل درجة امتحان البوتونليما:</label>
-                <input type="number" id="buttonlemaGrade" min="0" max="100" class="grade-input btn-input" placeholder="أدخل النتيجة هنا">
+                <input type="number" id="buttonlemaGrade" min="0" max="100" class="grade-input btn-input" placeholder="0 - 100">
             </div>
 
             <div id="buttonlemaResult" class="result-box"></div>
@@ -341,15 +338,36 @@
             const finalGradeInput = document.getElementById('finalGrade');
             const buttonlemaGradeInput = document.getElementById('buttonlemaGrade');
 
-            // دالة التحقق من صحة الرقم (تمنع تجاوز 100 أو النزول تحت 0)
+            // 1. دالة لمنع الحروف والأزرار غير المرغوب بها تماماً
+            const blockInvalidChars = (e) => {
+                if (['e', 'E', '+', '-'].includes(e.key)) {
+                    e.preventDefault();
+                }
+            };
+
+            // 2. دالة التحقق الشديدة من صحة الأرقام المدخلة
             const validateInput = (e) => {
                 let input = e.target;
+                
                 if (input.value !== "") {
+                    // منع كتابة أكثر من 5 رموز لتفادي الأرقام الطويلة جداً (مثل 100.5)
+                    if (input.value.length > 5) {
+                        input.value = input.value.slice(0, 5);
+                    }
+
                     let val = parseFloat(input.value);
-                    if (val > 100) input.value = 100;
-                    if (val < 0) input.value = 0;
+                    
+                    // إجبار الرقم على ألا يتجاوز 100
+                    if (val > 100) {
+                        input.value = 100;
+                    } 
+                    // إجبار الرقم على ألا يقل عن 0
+                    else if (val < 0) {
+                        input.value = 0;
+                    }
                 }
-                calculateResults(); // إعادة الحساب فوراً بعد التأكد من الرقم
+                
+                calculateResults(); // استدعاء الحساب بعد التأكد من نظافة الرقم
             };
 
             const generateKurulInputs = () => {
@@ -365,9 +383,10 @@
                     kurulInputsContainer.appendChild(div);
                 }
 
-                // ربط دالة التحقق بجميع حقول الكورولات
+                // ربط دوال الحماية بكل حقل يتم توليده
                 document.querySelectorAll('.kurul-input').forEach(input => {
                     input.addEventListener('input', validateInput);
+                    input.addEventListener('keypress', blockInvalidChars);
                 });
                 
                 calculateResults();
@@ -461,9 +480,13 @@
                 generateKurulInputs();
             });
             
-            // ربط دالة التحقق بحقول الفاينال والبوتونليما
+            // ربط دوال الحماية بحقول الفاينال والبوتونليما أيضاً
             finalGradeInput.addEventListener('input', validateInput);
+            finalGradeInput.addEventListener('keypress', blockInvalidChars);
+            
             buttonlemaGradeInput.addEventListener('input', validateInput);
+            buttonlemaGradeInput.addEventListener('keypress', blockInvalidChars);
+            
             resetBtn.addEventListener('click', resetAll);
 
             generateKurulInputs();
