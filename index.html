@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>حاسبة المعدل التراكمي | كلية الطب البشري</title>
     
+    <!-- استدعاء خط Cairo الاحترافي -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <style>
@@ -17,7 +18,7 @@
             --text-muted: #64748b;
             --border-color: #e2e8f0;
             
-            /* ألوان صناديق الحالات المحدثة */
+            /* ألوان صناديق الحالات */
             --success-bg: #dcfce7;
             --success-text: #166534;
             --success-border: #bbf7d0;
@@ -180,7 +181,6 @@
             gap: 1rem;
         }
 
-        /* تنسيق صناديق النتائج المعدلة */
         .result-box {
             padding: 1.2rem;
             border-radius: 10px;
@@ -275,7 +275,7 @@
             <div class="university-title">مخصص لكلية الطب البشري - جامعة الراعي</div>
             <div class="turkish-title">Sağlık Bilimleri Üniversitesi - Çobanbey Tıp Fakültesi</div>
             <div class="last-update">
-                🕒 آخر تحديث: 25 يونيو 2026، 10:33 مساءً
+                🕒 آخر تحديث: 25 يونيو 2026، 10:36 مساءً
             </div>
         </header>
 
@@ -295,7 +295,8 @@
             <div class="form-group" id="kurulGroup">
                 <div class="section-title">أولاً: أدخل درجات الكورولات</div>
                 <div id="kurulInputsContainer" class="grades-grid">
-                    </div>
+                    <!-- يتم التوليد التلقائي هنا -->
+                </div>
             </div>
 
             <div id="coroResult" class="result-box"></div>
@@ -340,7 +341,17 @@
             const finalGradeInput = document.getElementById('finalGrade');
             const buttonlemaGradeInput = document.getElementById('buttonlemaGrade');
 
-            // دالة بناء حقول الكورولات ديناميكياً
+            // دالة التحقق من صحة الرقم (تمنع تجاوز 100 أو النزول تحت 0)
+            const validateInput = (e) => {
+                let input = e.target;
+                if (input.value !== "") {
+                    let val = parseFloat(input.value);
+                    if (val > 100) input.value = 100;
+                    if (val < 0) input.value = 0;
+                }
+                calculateResults(); // إعادة الحساب فوراً بعد التأكد من الرقم
+            };
+
             const generateKurulInputs = () => {
                 const count = parseInt(kurulCountSelect.value);
                 kurulInputsContainer.innerHTML = '';
@@ -354,14 +365,14 @@
                     kurulInputsContainer.appendChild(div);
                 }
 
+                // ربط دالة التحقق بجميع حقول الكورولات
                 document.querySelectorAll('.kurul-input').forEach(input => {
-                    input.addEventListener('input', calculateResults);
+                    input.addEventListener('input', validateInput);
                 });
                 
                 calculateResults();
             };
 
-            // دالة المعالجة الحسابية الأساسية
             const calculateResults = () => {
                 resetResultSections();
 
@@ -373,18 +384,15 @@
                 const averageCoro = coroGrades.reduce((sum, grade) => sum + grade, 0) / coroGrades.length;
                 coroResultEl.style.display = 'block';
                 
-                // حالة الإعفاء الكامل (معدل الكورولات 80 أو أكثر)
                 if (averageCoro >= 80) {
                     coroResultEl.className = 'result-box success';
                     coroResultEl.innerHTML = `متوسط الكورولات: <span class="result-value">${averageCoro.toFixed(2)}</span><br>🎉 ممتاز! النتيجة: <strong>ناجح وتستحق الإعفاء</strong>، لا توجد حاجة لدخول الفاينال.`;
                     return;
                 }
 
-                // حساب متطلبات الفاينال بحالة عدم الإعفاء
                 finalExamSection.className = 'form-group visible-section';
                 const minFinalGrade = (60 - (0.60 * averageCoro)) / 0.40;
                 
-                // حالة الرسوب الحتمي قبل الفاينال
                 if (minFinalGrade > 100) {
                     coroResultEl.className = 'result-box danger';
                     coroResultEl.innerHTML = `متوسط الكورولات: <span class="result-value">${averageCoro.toFixed(2)}</span><br>❌ حالة حرجة: تحتاج لدرجة <span class="result-value">${minFinalGrade.toFixed(2)}</span> في الفاينال وهذا مستحيل. <strong>أنت راسب حكماً بالفاينال</strong>.`;
@@ -392,11 +400,9 @@
                     return;
                 }
 
-                // تعديل التنبيه ليصبح باللون البرتقالي التحذيري (Warning) ليدل على الخطر وعدم الأمان
                 coroResultEl.className = 'result-box warning';
                 coroResultEl.innerHTML = `متوسط الكورولات: <span class="result-value">${averageCoro.toFixed(2)}</span><br>⚠️ تنبيه: وضعك الحالي غير آمن وبحاجة لدخول الفاينال! أقل درجة مطلوبة للنجاح هي: <span class="result-value">${minFinalGrade.toFixed(2)}</span>`;
 
-                // حساب معدل الفاينال التراكمي في حال الإدخال
                 const finalGrade = parseFloat(finalGradeInput.value);
                 if (isNaN(finalGrade)) return; 
 
@@ -409,13 +415,11 @@
                     return;
                 }
 
-                // في حال الإخفاق بالفاينال والانتقال للتكميلي
                 finalResultEl.className = 'result-box danger';
                 finalResultEl.innerHTML = `معدلك بعد الفاينال: <span class="result-value">${finalCombined.toFixed(2)}</span><br>للأسف لم تتجاوز عتبة النجاح في الفاينال.`;
                 showButtonlema(minFinalGrade, averageCoro);
             };
 
-            // دالة التحكم في حساب البوتونليما
             const showButtonlema = (minReqGrade, averageCoro) => {
                 buttonlemaExamSection.className = 'form-group visible-section';
                 finalResultEl.innerHTML += `<br>أنت بحاجة لدخول البوتونليما. الدرجة المطلوبة لإنقاذ العام الدراسي هي: <span class="result-value">${minReqGrade.toFixed(2)}</span>`;
@@ -457,8 +461,9 @@
                 generateKurulInputs();
             });
             
-            finalGradeInput.addEventListener('input', calculateResults);
-            buttonlemaGradeInput.addEventListener('input', calculateResults);
+            // ربط دالة التحقق بحقول الفاينال والبوتونليما
+            finalGradeInput.addEventListener('input', validateInput);
+            buttonlemaGradeInput.addEventListener('input', validateInput);
             resetBtn.addEventListener('click', resetAll);
 
             generateKurulInputs();
