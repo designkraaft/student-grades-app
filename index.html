@@ -3,241 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة الكورولات</title>
+    <title>حاسبة الكورولات - كلية الطب</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2563EB; /* أزرق بارز لجذب الانتباه */
-            --primary-hover: #1D4ED8;
-            --bg-color: #F3F4F6;
-            --card-bg: #FFFFFF;
-            --text-main: #1F2937;
-            --text-muted: #6B7280;
-            --border-color: #E5E7EB;
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --primary-dark: #1d4ed8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Cairo', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
             min-height: 100vh;
         }
-        .container {
-            max-width: 500px;
-            width: 100%;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-        }
-        h1 {
+
+        /* ----- Header Styles ----- */
+        header {
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow-sm);
+            padding: 20px;
             text-align: center;
-            font-size: 1.5rem;
-            margin-bottom: 25px;
-            color: var(--text-main);
+            border-bottom: 3px solid var(--primary);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+        }
+        header p {
+            margin: 5px 0 0;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* ----- Main Content ----- */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
         }
         
-        /* الخطوة 1: اختيار العدد (مميزة بصرياً في البداية) */
+        .calculator-card {
+            background: var(--card-bg);
+            max-width: 550px;
+            width: 100%;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            padding: 30px;
+            border: 1px solid var(--border);
+        }
+
+        /* ----- Step 1: Selection ----- */
+        .step-container {
+            transition: all 0.4s ease;
+        }
         .step-1 {
-            background-color: #EFF6FF; /* خلفية زرقاء فاتحة لجذب العين */
-            border: 2px solid var(--primary);
-            padding: 20px;
+            background-color: var(--primary-light);
+            border: 2px dashed var(--primary);
+            padding: 25px;
             border-radius: 12px;
+            text-align: center;
             margin-bottom: 20px;
-            transition: all 0.4s ease; /* انتقال ناعم للألوان */
+            transition: all 0.4s ease;
         }
         .step-1 label {
             display: block;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-            transition: color 0.4s ease;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
         }
+        
         select, input[type="number"] {
             width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-color);
+            padding: 14px;
+            border: 2px solid var(--border);
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
             outline: none;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
         select:focus, input[type="number"]:focus {
             border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
         }
-        
-        /* الخطوة 2: إدخال الدرجات (مخفية افتراضياً) */
+
+        /* ----- Step 2: Inputs (Hidden initially) ----- */
         .step-2 {
-            display: none; /* الإخفاء المشروط */
+            display: none;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transform: translateY(-10px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
         .step-2.active {
             display: block;
             opacity: 1;
+            transform: translateY(0);
         }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+        }
+
         .kurul-group {
-            margin-bottom: 15px;
-            background: #F9FAFB;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fdfdfd;
             padding: 15px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+            transition: transform 0.2s ease;
+        }
+        .kurul-group:hover {
+            transform: scale(1.01);
+            border-color: #cbd5e1;
         }
         .kurul-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
+            font-weight: 700;
+            color: var(--text-muted);
+            width: 40%;
         }
-        button {
+        .kurul-group input {
+            width: 55%;
+            text-align: center;
+        }
+
+        /* ----- Button ----- */
+        .calc-btn {
             width: 100%;
-            padding: 14px;
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
+            padding: 16px;
             border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            font-family: 'Cairo', sans-serif;
             cursor: pointer;
             margin-top: 10px;
-            transition: background-color 0.3s;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        button:hover {
-            background-color: var(--primary-hover);
+        .calc-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
         }
-        .result-box {
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 8px;
-            display: none;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-        .success { background-color: #D1FAE5; color: #065F46; border: 1px solid #10B981; }
-        .warning { background-color: #FEF3C7; color: #92400E; border: 1px solid #F59E0B; }
-        .danger { background-color: #FEE2E2; color: #991B1B; border: 1px solid #EF4444; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h1>🩺 حاسبة كورولات الطب</h1>
-
-    <!-- صندوق اختيار العدد -->
-    <div class="step-1" id="step1Box">
-        <label id="step1Label" for="kurulCount">الخطوة 1: حدد عدد الكورولات أولاً</label>
-        <select id="kurulCount" onchange="generateKurulInputs()">
-            <option value="" disabled selected>-- اضغط لاختيار العدد --</option>
-            <option value="4">4 كورولات</option>
-            <option value="5">5 كورولات</option>
-            <option value="6">6 كورولات</option>
-            <option value="7">7 كورولات</option>
-            <option value="8">8 كورولات</option>
-        </select>
-    </div>
-
-    <!-- صندوق إدخال الدرجات -->
-    <div class="step-2" id="step2Box">
-        <h3 style="color: var(--text-muted); font-size: 1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px;">
-            الخطوة 2: أدخل درجاتك بدقة
-        </h3>
-        <div id="kurulInputsContainer"></div>
-        <button onclick="calculateResults()">حساب المعدل والتكميلي</button>
-    </div>
-
-    <div id="resultBox" class="result-box"></div>
-</div>
-
-<script>
-    // توليد الحقول وإدارة الأنيميشن
-    function generateKurulInputs() {
-        const count = document.getElementById('kurulCount').value;
-        const container = document.getElementById('kurulInputsContainer');
-        const step2Box = document.getElementById('step2Box');
-        const step1Box = document.getElementById('step1Box');
-        const step1Label = document.getElementById('step1Label');
-        
-        container.innerHTML = ''; 
-
-        if (count) {
-            for (let i = 1; i <= count; i++) {
-                const div = document.createElement('div');
-                div.className = 'kurul-group';
-                div.innerHTML = `
-                    <label>نتيجة الكورول ${i}</label>
-                    <input type="number" id="kurul_${i}" placeholder="درجة من 0 إلى 100" oninput="validateInput(this)">
-                `;
-                container.appendChild(div);
-            }
-            
-            // إظهار الخطوة الثانية بنعومة
-            step2Box.classList.add('active');
-            
-            // تخفيف إبراز الخطوة الأولى لتوجيه العين للأسفل
-            step1Box.style.backgroundColor = 'transparent';
-            step1Box.style.borderColor = 'var(--border-color)';
-            step1Label.style.color = 'var(--text-muted)';
-            
-            // إخفاء صندوق النتيجة إن كان ظاهراً من عملية سابقة
-            document.getElementById('resultBox').style.display = 'none';
-        }
-    }
-
-    // نظام الحماية الصارم للإدخال (يمنع الأحرف ويقص الأرقام خارج 0-100)
-    function validateInput(input) {
-        input.value = input.value.replace(/[^0-9.]/g, ''); // حظر الأحرف غير الصالحة
-        
-        if (input.value !== '') {
-            let val = parseFloat(input.value);
-            if (val > 100) input.value = 100;
-            if (val < 0) input.value = 0;
-        }
-    }
-
-    // حساب النتيجة والتنبيهات (الفاينال والبوتونليما)
-    function calculateResults() {
-        const count = document.getElementById('kurulCount').value;
-        if (!count) return;
-
-        let sum = 0;
-        let allFilled = true;
-
-        for (let i = 1; i <= count; i++) {
-            const val = document.getElementById(`kurul_${i}`).value;
-            if (val === '') {
-                allFilled = false;
-                break;
-            }
-            sum += parseFloat(val);
-        }
-
-        if (!allFilled) {
-            alert("يرجى إدخال درجات جميع الكورولات التي اخترتها قبل الحساب.");
-            return;
-        }
-
-        const average = sum / count;
-        const resultBox = document.getElementById('resultBox');
-        resultBox.style.display = 'block';
-
-        // يمكنك تعديل هذه الشروط برمجياً لتطابق قوانين جامعتك للنجاح والإعفاء
-        if (average >= 60) {
-            resultBox.className = 'result-box success';
-            resultBox.innerHTML = `معدل الكورولات: ${average.toFixed(2)}<br>أداؤك ممتاز! وضعك آمن للنجاح.`;
-        } else if (average >= 40) {
-            resultBox.className = 'result-box warning';
-            resultBox.innerHTML = `معدل الكورولات: ${average.toFixed(2)}<br>انتبه: ستحتاج للتعويض في امتحان الفاينال أو البوتونليما.`;
-        } else {
-            resultBox.className = 'result-box danger';
-            resultBox.innerHTML = `معدل الكورولات: ${average.toFixed(2)}<br>تنبيه: فرصة النجاح مستحيلة أو صعبة جداً بهذا المعدل.`;
-        }
-    }
-</script>
-
-</body>
-</html>
+        .calc-btn:active {
+            transform: translateY(1
