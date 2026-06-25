@@ -6,228 +6,44 @@
     <title>حاسبة الكورولات - كلية الطب</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #2563eb;
-            --primary-light: #eff6ff;
-            --primary-dark: #1d4ed8;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-
-        body {
-            font-family: 'Cairo', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        /* ----- Header Styles ----- */
-        header {
-            background-color: var(--card-bg);
-            box-shadow: var(--shadow-sm);
-            padding: 25px 20px;
-            text-align: center;
-            border-bottom: 4px solid var(--primary);
-        }
-        header h1 {
-            margin: 0;
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary-dark);
-        }
-        header p {
-            margin: 5px 0 0;
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-        .update-date {
-            display: inline-block;
-            margin-top: 10px;
-            font-size: 0.85rem;
-            background-color: var(--primary-light);
-            color: var(--primary-dark);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-weight: 700;
-        }
-
-        /* ----- Main Content ----- */
-        main {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 40px 20px;
-        }
-        
-        .calculator-card {
-            background: var(--card-bg);
-            max-width: 550px;
-            width: 100%;
-            border-radius: 16px;
-            box-shadow: var(--shadow-md);
-            padding: 30px;
-            border: 1px solid var(--border);
-        }
-
-        /* ----- Step 1: Selection ----- */
-        .step-1 {
-            background-color: var(--primary-light);
-            border: 2px dashed var(--primary);
-            padding: 25px;
-            border-radius: 12px;
-            text-align: center;
-            margin-bottom: 20px;
-            transition: all 0.4s ease;
-        }
-        .step-1 label {
-            display: block;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin-bottom: 15px;
-        }
-        
-        select, input[type="number"] {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-family: 'Cairo', sans-serif;
-            font-weight: 600;
-            outline: none;
-            transition: all 0.3s;
-        }
-        select:focus, input[type="number"]:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
-        }
-
-        /* ----- Step 2: Dynamic Inputs ----- */
-        .step-2 {
-            display: none;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.5s ease;
-        }
-        .step-2.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .section-title {
-            font-size: 1.2rem;
-            font-weight: 800;
-            color: var(--primary-dark);
-            margin: 25px 0 15px 0;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .kurul-group {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #fdfdfd;
-            padding: 12px 15px;
-            border-radius: 10px;
-            margin-bottom: 12px;
-            border: 1px solid var(--border);
-            transition: transform 0.2s ease;
-        }
-        .kurul-group:hover {
-            transform: scale(1.01);
-            border-color: #cbd5e1;
-        }
-        .kurul-group label {
-            font-weight: 700;
-            color: var(--text-muted);
-            width: 40%;
-        }
-        .kurul-group input {
-            width: 55%;
-            text-align: center;
-        }
-
-        /* ----- Results & Supplementary Exams ----- */
-        .result-box {
-            margin-top: 15px;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: 700;
-            font-size: 1.1rem;
-            animation: fadeIn 0.4s ease forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        :root { --primary: #2563eb; --primary-light: #eff6ff; --primary-dark: #1d4ed8; --success: #10b981; --warning: #f59e0b; --danger: #ef4444; --bg-color: #f8fafc; --card-bg: #ffffff; --text-main: #1e293b; --text-muted: #64748b; --border: #e2e8f0; }
+        body { font-family: 'Cairo', sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        header { background-color: var(--card-bg); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); padding: 25px 20px; text-align: center; border-bottom: 4px solid var(--primary); }
+        header h1 { margin: 0; font-size: 1.8rem; font-weight: 800; color: var(--primary-dark); }
+        header p { margin: 5px 0 0; font-size: 1.1rem; color: var(--text-muted); font-weight: 600; }
+        .univ-info { font-size: 0.9rem; color: #475569; margin-top: 10px; font-weight: 700; }
+        main { flex: 1; display: flex; justify-content: center; align-items: flex-start; padding: 40px 20px; }
+        .calculator-card { background: var(--card-bg); max-width: 550px; width: 100%; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); padding: 30px; border: 1px solid var(--border); }
+        .step-1 { background-color: var(--primary-light); border: 2px dashed var(--primary); padding: 25px; border-radius: 12px; text-align: center; margin-bottom: 20px; }
+        .step-1 label { display: block; font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 15px; }
+        select, input { width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 8px; font-size: 1.1rem; font-family: 'Cairo', sans-serif; outline: none; box-sizing: border-box; }
+        .step-2 { display: none; }
+        .step-2.active { display: block; }
+        .section-title { font-size: 1.2rem; font-weight: 800; color: var(--primary-dark); margin: 25px 0 15px 0; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
+        .kurul-group { display: flex; align-items: center; justify-content: space-between; background: #fdfdfd; padding: 12px 15px; border-radius: 10px; margin-bottom: 12px; border: 1px solid var(--border); }
+        .result-box { margin-top: 15px; padding: 15px; border-radius: 10px; text-align: center; font-weight: 700; font-size: 1.1rem; display: none; }
         .success { background-color: #d1fae5; color: #065f46; border: 1px solid var(--success); }
         .warning { background-color: #fef3c7; color: #92400e; border: 1px solid var(--warning); }
         .danger { background-color: #fee2e2; color: #991b1b; border: 1px solid var(--danger); }
-        .highlight-num { font-size: 1.4rem; font-weight: 800; display: inline-block; margin: 0 5px; }
-
-        .exam-section {
-            background-color: #f8fafc;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            margin-top: 20px;
-            display: none;
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        /* ----- Footer Styles ----- */
-        footer {
-            background-color: var(--text-main);
-            color: #f1f5f9;
-            text-align: center;
-            padding: 15px;
-            font-size: 1rem;
-            font-weight: 600;
-            margin-top: auto;
-        }
-        footer span {
-            color: #38bdf8;
-            font-weight: 800;
-        }
+        footer { background-color: var(--text-main); color: #f1f5f9; text-align: center; padding: 20px; font-size: 1rem; margin-top: auto; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>جامعة جوبان باي - كلية الطب</h1>
-        <p>Çobanbey Tıp Fakültesi</p>
-        <span class="update-date">تاريخ التحديث: 26 يونيو 2026</span>
+        <h1>حاسبة الكورولات - كلية الطب البشري</h1>
+        <p>Çobanbey Tıp Fakültesi | Sağlık Bilimleri Üniversitesi</p>
+        <div class="univ-info">تاريخ التعديل الأخير: 26 يونيو 2026</div>
     </header>
 
     <main>
         <div class="calculator-card">
-            
             <div class="step-1" id="step1Box">
-                <label id="step1Label" for="kurulCount">الخطوة الأولى: كم عدد الكورولات؟</label>
+                <label id="step1Label" for="kurulCount">الخطوة الأولى: حدد عدد الكورولات</label>
                 <select id="kurulCount" onchange="generateKurulInputs()">
-                    <option value="" disabled selected>-- اختر العدد من هنا --</option>
-                    <option value="4">4 كورولات</option>
-                    <option value="5">5 كورولات</option>
-                    <option value="6">6 كورولات</option>
-                    <option value="7">7 كورولات</option>
+                    <option value="" disabled selected>-- اختر العدد --</option>
+                    <option value="4">4 كورولات</option><option value="5">5 كورولات</option>
+                    <option value="6">6 كورولات</option><option value="7">7 كورولات</option>
                     <option value="8">8 كورولات</option>
                 </select>
             </div>
@@ -235,166 +51,72 @@
             <div class="step-2" id="step2Box">
                 <div class="section-title">درجات الكورولات</div>
                 <div id="kurulInputsContainer"></div>
+                <div id="kurulResult" class="result-box"></div>
                 
-                <div id="kurulResult" class="result-box" style="display: none;"></div>
-
-                <div id="finalSection" class="exam-section">
-                    <label style="display: block; font-weight: 700; margin-bottom: 10px; color: var(--primary-dark);">أدخل درجة الفاينال:</label>
-                    <input type="number" id="finalScore" placeholder="درجة الفاينال (0 - 100)" oninput="validateInput(this)">
-                    <div id="finalResult" class="result-box" style="display: none;"></div>
+                <div id="finalSection" style="display:none;">
+                    <div class="section-title">امتحان الفاينال</div>
+                    <input type="number" id="finalScore" placeholder="درجة الفاينال (0 - 100)" oninput="calculateOverall()">
+                    <div id="finalResult" class="result-box"></div>
                 </div>
 
-                <div id="butunlemeSection" class="exam-section">
-                    <label style="display: block; font-weight: 700; margin-bottom: 10px; color: var(--danger);">أدخل درجة البوتونليما:</label>
-                    <input type="number" id="butunlemeScore" placeholder="درجة البوتونليما (0 - 100)" oninput="validateInput(this)">
-                    <div id="butunlemeResult" class="result-box" style="display: none;"></div>
+                <div id="butunlemeSection" style="display:none;">
+                    <div class="section-title">امتحان البوتونليما</div>
+                    <input type="number" id="butunlemeScore" placeholder="درجة البوتونليما (0 - 100)" oninput="calculateOverall()">
+                    <div id="butunlemeResult" class="result-box"></div>
                 </div>
             </div>
-
         </div>
     </main>
 
     <footer>
-        <p>تم التصميم والتطوير بواسطة: محمود | <span>Ebdaa Hub</span></p>
+        <p>تصميم وتطوير: الطالب <span>خلدون الحمدو</span></p>
+        <p>كل الحقوق محفوظة © 2026</p>
     </footer>
 
     <script>
-        // توليد حقول الكورولات
         function generateKurulInputs() {
             const count = document.getElementById('kurulCount').value;
             const container = document.getElementById('kurulInputsContainer');
-            const step2Box = document.getElementById('step2Box');
-            const step1Box = document.getElementById('step1Box');
-            const step1Label = document.getElementById('step1Label');
-            
-            container.innerHTML = ''; 
-            resetCalculations();
-
-            if (count) {
-                for (let i = 1; i <= count; i++) {
-                    const div = document.createElement('div');
-                    div.className = 'kurul-group';
-                    div.innerHTML = `
-                        <label>الكورول ${i}</label>
-                        <input type="number" id="kurul_${i}" placeholder="0 - 100" oninput="validateInput(this)">
-                    `;
-                    container.appendChild(div);
-                }
-                
-                step2Box.classList.add('active');
-                step1Box.style.backgroundColor = 'transparent';
-                step1Box.style.borderStyle = 'solid';
-                step1Box.style.borderColor = 'var(--border)';
-                step1Box.style.padding = '15px';
-                step1Label.style.color = 'var(--text-muted)';
-                step1Label.innerText = 'عدد الكورولات المحدد:';
+            container.innerHTML = '';
+            document.getElementById('step2Box').classList.add('active');
+            for (let i = 1; i <= count; i++) {
+                container.innerHTML += `<div class="kurul-group"><label>الكورول ${i}</label><input type="number" id="kurul_${i}" oninput="calculateOverall()"></div>`;
             }
         }
 
-        // إخفاء الأقسام عند تغيير العدد
-        function resetCalculations() {
-            document.getElementById('kurulResult').style.display = 'none';
-            document.getElementById('finalSection').style.display = 'none';
-            document.getElementById('butunlemeSection').style.display = 'none';
-            document.getElementById('finalScore').value = '';
-            document.getElementById('butunlemeScore').value = '';
-        }
-
-        // الحماية الصارمة للمدخلات وتنفيذ الحساب المباشر
-        function validateInput(input) {
-            input.value = input.value.replace(/[^0-9.]/g, ''); 
-            if (input.value !== '') {
-                let val = parseFloat(input.value);
-                if (val > 100) input.value = 100;
-                if (val < 0) input.value = 0;
-            }
-            calculateOverall(); // الحساب الفوري بمجرد الكتابة
-        }
-
-        // المنطق الديناميكي للحسابات (الكورولات + الفاينال + البوتونليما)
         function calculateOverall() {
             const count = parseInt(document.getElementById('kurulCount').value);
-            let sum = 0;
-            let filledCount = 0;
-
-            // جمع درجات الكورولات
+            let sum = 0, filled = 0;
             for (let i = 1; i <= count; i++) {
                 let val = document.getElementById(`kurul_${i}`).value;
-                if (val !== '') {
-                    sum += parseFloat(val);
-                    filledCount++;
-                }
+                if (val !== '') { sum += parseFloat(val); filled++; }
             }
-
-            // لا تحسب الفاينال حتى تكتمل كل الكورولات
-            if (filledCount < count) {
-                document.getElementById('kurulResult').style.display = 'none';
-                document.getElementById('finalSection').style.display = 'none';
-                document.getElementById('butunlemeSection').style.display = 'none';
-                return;
-            }
+            if (filled < count) return;
 
             let kurulAvg = sum / count;
-            let reqFinal = (60 - (kurulAvg * 0.6)) / 0.4;
-            let reqFinalText = reqFinal <= 0 ? "أنت ناجح (0)" : (reqFinal > 100 ? "مستحيل (>100)" : reqFinal.toFixed(2));
-
-            // إظهار نتيجة الكورولات وفتح الفاينال
-            let kurulResBox = document.getElementById('kurulResult');
-            kurulResBox.style.display = 'block';
-            kurulResBox.className = 'result-box ' + (reqFinal > 100 ? 'danger' : 'success');
-            kurulResBox.innerHTML = `متوسط الكورولات: <span class="highlight-num">${kurulAvg.toFixed(2)}</span><br>تحتاج في الفاينال إلى: <span class="highlight-num">${reqFinalText}</span>`;
-
+            document.getElementById('kurulResult').style.display = 'block';
+            document.getElementById('kurulResult').innerHTML = `متوسط الكورولات: ${kurulAvg.toFixed(2)}`;
+            
             document.getElementById('finalSection').style.display = 'block';
-
-            // حساب الفاينال
-            let finalInput = document.getElementById('finalScore').value;
-            let finalSectionRes = document.getElementById('finalResult');
-            let butunlemeSection = document.getElementById('butunlemeSection');
-
-            if (finalInput !== '') {
-                let finalScore = parseFloat(finalInput);
-                let finalAvg = (kurulAvg * 0.6) + (finalScore * 0.4);
-
-                finalSectionRes.style.display = 'block';
-                if (finalAvg >= 60) {
-                    finalSectionRes.className = 'result-box success';
-                    finalSectionRes.innerHTML = `المعدل العام: <span class="highlight-num">${finalAvg.toFixed(2)}</span><br>🎉 مبروك! لقد نجحت.`;
-                    butunlemeSection.style.display = 'none'; // إخفاء البوتونليما إذا نجح
-                } else {
-                    let reqButunleme = reqFinal; // البوتونليما يعوض الفاينال
-                    let reqButText = reqButunleme > 100 ? "مستحيل (>100)" : reqButunleme.toFixed(2);
-                    
-                    finalSectionRes.className = 'result-box warning';
-                    finalSectionRes.innerHTML = `المعدل العام: <span class="highlight-num">${finalAvg.toFixed(2)}</span><br>⚠️ لم تنجح بالفاينال، ركز على البوتونليما!`;
-                    
-                    butunlemeSection.style.display = 'block';
-
-                    // حساب البوتونليما
-                    let butInput = document.getElementById('butunlemeScore').value;
-                    let butRes = document.getElementById('butunlemeResult');
-                    
-                    if (butInput !== '') {
-                        let butScore = parseFloat(butInput);
-                        let butAvg = (kurulAvg * 0.6) + (butScore * 0.4);
-                        butRes.style.display = 'block';
-                        
-                        if (butAvg >= 60) {
-                            butRes.className = 'result-box success';
-                            butRes.innerHTML = `المعدل بعد البوتونليما: <span class="highlight-num">${butAvg.toFixed(2)}</span><br>🎉 مبروك! لقد تجاوزت المادة بنجاح.`;
-                        } else {
-                            butRes.className = 'result-box danger';
-                            butRes.innerHTML = `المعدل بعد البوتونليما: <span class="highlight-num">${butAvg.toFixed(2)}</span><br>❌ للأسف لم تحقق شرط النجاح (60).`;
-                        }
-                    } else {
-                        butRes.style.display = 'none';
+            let fVal = document.getElementById('finalScore').value;
+            if (fVal !== '') {
+                let fAvg = (kurulAvg * 0.6) + (parseFloat(fVal) * 0.4);
+                document.getElementById('finalResult').style.display = 'block';
+                document.getElementById('finalResult').className = fAvg >= 60 ? 'result-box success' : 'result-box warning';
+                document.getElementById('finalResult').innerHTML = fAvg >= 60 ? `المعدل: ${fAvg.toFixed(2)} - ناجح 🎉` : `المعدل: ${fAvg.toFixed(2)} - ركز على البوتونليما ⚠️`;
+                
+                if (fAvg < 60) {
+                    document.getElementById('butunlemeSection').style.display = 'block';
+                    let bVal = document.getElementById('butunlemeScore').value;
+                    if (bVal !== '') {
+                        let bAvg = (kurulAvg * 0.6) + (parseFloat(bVal) * 0.4);
+                        document.getElementById('butunlemeResult').style.display = 'block';
+                        document.getElementById('butunlemeResult').className = bAvg >= 60 ? 'result-box success' : 'result-box danger';
+                        document.getElementById('butunlemeResult').innerHTML = bAvg >= 60 ? `المعدل النهائي: ${bAvg.toFixed(2)} - ناجح 🎉` : `المعدل النهائي: ${bAvg.toFixed(2)} - للأسف راسب ❌`;
                     }
                 }
-            } else {
-                finalSectionRes.style.display = 'none';
-                butunlemeSection.style.display = 'none';
             }
         }
     </script>
-
 </body>
 </html>
