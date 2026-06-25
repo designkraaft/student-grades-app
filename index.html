@@ -3,120 +3,494 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة الكورولات - كلية الطب</title>
+    <title>حاسبة المعدل التراكمي | كلية الطب البشري</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        :root { --primary: #2563eb; --primary-light: #eff6ff; --primary-dark: #1d4ed8; --success: #10b981; --warning: #f59e0b; --danger: #ef4444; --bg-color: #f8fafc; --card-bg: #ffffff; --text-main: #1e293b; --text-muted: #64748b; --border: #e2e8f0; }
-        body { font-family: 'Cairo', sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
-        header { background-color: var(--card-bg); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); padding: 25px 20px; text-align: center; border-bottom: 4px solid var(--primary); }
-        header h1 { margin: 0; font-size: 1.8rem; font-weight: 800; color: var(--primary-dark); }
-        header p { margin: 5px 0 0; font-size: 1.1rem; color: var(--text-muted); font-weight: 600; }
-        .univ-info { font-size: 0.9rem; color: #475569; margin-top: 10px; font-weight: 700; }
-        main { flex: 1; display: flex; justify-content: center; align-items: flex-start; padding: 40px 20px; }
-        .calculator-card { background: var(--card-bg); max-width: 550px; width: 100%; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); padding: 30px; border: 1px solid var(--border); }
-        .step-1 { background-color: var(--primary-light); border: 2px dashed var(--primary); padding: 25px; border-radius: 12px; text-align: center; margin-bottom: 20px; }
-        .step-1 label { display: block; font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 15px; }
-        select, input { width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 8px; font-size: 1.1rem; font-family: 'Cairo', sans-serif; outline: none; box-sizing: border-box; }
-        .step-2 { display: none; }
-        .step-2.active { display: block; }
-        .section-title { font-size: 1.2rem; font-weight: 800; color: var(--primary-dark); margin: 25px 0 15px 0; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
-        .kurul-group { display: flex; align-items: center; justify-content: space-between; background: #fdfdfd; padding: 12px 15px; border-radius: 10px; margin-bottom: 12px; border: 1px solid var(--border); }
-        .result-box { margin-top: 15px; padding: 15px; border-radius: 10px; text-align: center; font-weight: 700; font-size: 1.1rem; display: none; }
-        .success { background-color: #d1fae5; color: #065f46; border: 1px solid var(--success); }
-        .warning { background-color: #fef3c7; color: #92400e; border: 1px solid var(--warning); }
-        .danger { background-color: #fee2e2; color: #991b1b; border: 1px solid var(--danger); }
-        footer { background-color: var(--text-main); color: #f1f5f9; text-align: center; padding: 20px; font-size: 1rem; margin-top: auto; }
+        :root {
+            --primary-color: #0ea5e9; 
+            --primary-dark: #0284c7;
+            --bg-gradient: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            
+            --success-bg: #dcfce7;
+            --success-text: #166534;
+            --success-border: #bbf7d0;
+            
+            --warning-bg: #fff7ed;    
+            --warning-text: #c2410c;
+            --warning-border: #ffedd5;
+            
+            --danger-bg: #fee2e2;     
+            --danger-text: #991b1b;
+            --danger-border: #fecaca;
+            
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+            line-height: 1.6;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-section {
+            background: var(--primary-dark);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .header-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #38bdf8, #0284c7);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .university-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #bae6fd;
+            margin-bottom: 0.2rem;
+        }
+
+        .turkish-title {
+            font-size: 0.9rem;
+            color: #7dd3fc;
+            letter-spacing: 1px;
+        }
+
+        .last-update {
+            display: inline-block;
+            margin-top: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .content-section {
+            padding: 2rem;
+        }
+
+        .form-group {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group:hover {
+            border-color: #bae6fd;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::before {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 24px;
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            background-color: white;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        select:focus, input[type="number"]:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+        }
+
+        .grades-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 1rem;
+        }
+
+        .result-box {
+            padding: 1.2rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-align: center;
+            animation: fadeIn 0.4s ease-in-out;
+            display: none;
+        }
+
+        .result-box.success { background: var(--success-bg); color: var(--success-text); border: 1px solid var(--success-border); }
+        .result-box.warning { background: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border); }
+        .result-box.danger { background: var(--danger-bg); color: var(--danger-text); border: 1px solid var(--danger-border); }
+
+        .result-value {
+            font-size: 1.4rem;
+            display: inline-block;
+            margin: 0 0.2rem;
+            padding: 0.1rem 0.5rem;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 6px;
+        }
+
+        .hidden-section {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transform: translateY(-10px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        .visible-section {
+            opacity: 1;
+            max-height: 500px;
+            transform: translateY(0);
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-reset {
+            width: 100%;
+            padding: 1rem;
+            background: #cbd5e1;
+            color: #334155;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .btn-reset:hover {
+            background: #94a3b8;
+            color: white;
+        }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 600px) {
+            .header-section { padding: 1.5rem 1rem; }
+            h1 { font-size: 1.6rem; }
+            .content-section { padding: 1rem; }
+            .grades-grid { grid-template-columns: repeat(2, 1fr); }
+            .form-group { padding: 1rem; }
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>حاسبة الكورولات - كلية الطب البشري</h1>
-        <p>Çobanbey Tıp Fakültesi | Sağlık Bilimleri Üniversitesi</p>
-        <div class="univ-info">تاريخ التعديل الأخير: 26 يونيو 2026</div>
-    </header>
+    <div class="main-container">
+        <header class="header-section">
+            <h1>حاسبة المعدل التراكمي</h1>
+            <div class="university-title">مخصص لكلية الطب البشري - جامعة الراعي</div>
+            <div class="turkish-title">Sağlık Bilimleri Üniversitesi - Çobanbey Tıp Fakültesi</div>
+            <div class="last-update">
+                🕒 آخر تحديث: 25 يونيو 2026، 11:39 مساءً
+            </div>
+        </header>
 
-    <main>
-        <div class="calculator-card">
-            <div class="step-1" id="step1Box">
-                <label id="step1Label" for="kurulCount">الخطوة الأولى: حدد عدد الكورولات</label>
-                <select id="kurulCount" onchange="generateKurulInputs()">
-                    <option value="" disabled selected>-- اختر العدد --</option>
-                    <option value="4">4 كورولات</option><option value="5">5 كورولات</option>
-                    <option value="6">6 كورولات</option><option value="7">7 كورولات</option>
+        <div class="content-section">
+            <div class="form-group">
+                <div class="section-title">إعدادات السنة الدراسية</div>
+                <label for="kurulCount">كم عدد الكورولات (اللجان) في هذه السنة؟</label>
+                <select id="kurulCount">
+                    <option value="4">4 كورولات</option>
+                    <option value="5">5 كورولات</option>
+                    <option value="6" selected>6 كورولات</option>
+                    <option value="7">7 كورولات</option>
                     <option value="8">8 كورولات</option>
                 </select>
             </div>
 
-            <div class="step-2" id="step2Box">
-                <div class="section-title">درجات الكورولات</div>
-                <div id="kurulInputsContainer"></div>
-                <div id="kurulResult" class="result-box"></div>
-                
-                <div id="finalSection" style="display:none;">
-                    <div class="section-title">امتحان الفاينال</div>
-                    <input type="number" id="finalScore" placeholder="درجة الفاينال (0 - 100)" oninput="calculateOverall()">
-                    <div id="finalResult" class="result-box"></div>
-                </div>
-
-                <div id="butunlemeSection" style="display:none;">
-                    <div class="section-title">امتحان البوتونليما</div>
-                    <input type="number" id="butunlemeScore" placeholder="درجة البوتونليما (0 - 100)" oninput="calculateOverall()">
-                    <div id="butunlemeResult" class="result-box"></div>
-                </div>
+            <div class="form-group" id="kurulGroup">
+                <div class="section-title">أولاً: أدخل درجات الكورولات</div>
+                <div id="kurulInputsContainer" class="grades-grid">
+                    </div>
             </div>
+
+            <div id="coroResult" class="result-box"></div>
+
+            <div id="finalExamSection" class="form-group hidden-section">
+                <div class="section-title">ثانياً: امتحان الفاينال (النهائي)</div>
+                <label for="finalGrade">أدخل الدرجة التي حصلت عليها في الفاينال:</label>
+                <input type="number" id="finalGrade" min="0" max="100" class="grade-input final-input" placeholder="0 - 100">
+            </div>
+
+            <div id="finalResult" class="result-box"></div>
+
+            <div id="buttonlemaExamSection" class="form-group hidden-section">
+                <div class="section-title" style="color: #ea580c;">ثالثاً: امتحان البوتونليما (التكميلي)</div>
+                <label for="buttonlemaGrade">أدخل درجة امتحان البوتونليما:</label>
+                <input type="number" id="buttonlemaGrade" min="0" max="100" class="grade-input btn-input" placeholder="0 - 100">
+            </div>
+
+            <div id="buttonlemaResult" class="result-box"></div>
+
+            <button id="resetBtn" class="btn-reset">إعادة تعيين وبدء حساب جديد ↻</button>
         </div>
-    </main>
+    </div>
 
     <footer>
-        <p>تصميم وتطوير: الطالب <span>خلدون الحمدو</span></p>
-        <p>كل الحقوق محفوظة © 2026</p>
+        تم التصميم والتطوير بواسطة الطالب خلدون الحمدو &copy; 2026
     </footer>
 
     <script>
-        function generateKurulInputs() {
-            const count = document.getElementById('kurulCount').value;
-            const container = document.getElementById('kurulInputsContainer');
-            container.innerHTML = '';
-            document.getElementById('step2Box').classList.add('active');
-            for (let i = 1; i <= count; i++) {
-                container.innerHTML += `<div class="kurul-group"><label>الكورول ${i}</label><input type="number" id="kurul_${i}" oninput="calculateOverall()"></div>`;
-            }
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const kurulCountSelect = document.getElementById('kurulCount');
+            const kurulInputsContainer = document.getElementById('kurulInputsContainer');
+            const resetBtn = document.getElementById('resetBtn');
 
-        function calculateOverall() {
-            const count = parseInt(document.getElementById('kurulCount').value);
-            let sum = 0, filled = 0;
-            for (let i = 1; i <= count; i++) {
-                let val = document.getElementById(`kurul_${i}`).value;
-                if (val !== '') { sum += parseFloat(val); filled++; }
-            }
-            if (filled < count) return;
-
-            let kurulAvg = sum / count;
-            document.getElementById('kurulResult').style.display = 'block';
-            document.getElementById('kurulResult').innerHTML = `متوسط الكورولات: ${kurulAvg.toFixed(2)}`;
+            const coroResultEl = document.getElementById('coroResult');
+            const finalResultEl = document.getElementById('finalResult');
+            const buttonlemaResultEl = document.getElementById('buttonlemaResult');
             
-            document.getElementById('finalSection').style.display = 'block';
-            let fVal = document.getElementById('finalScore').value;
-            if (fVal !== '') {
-                let fAvg = (kurulAvg * 0.6) + (parseFloat(fVal) * 0.4);
-                document.getElementById('finalResult').style.display = 'block';
-                document.getElementById('finalResult').className = fAvg >= 60 ? 'result-box success' : 'result-box warning';
-                document.getElementById('finalResult').innerHTML = fAvg >= 60 ? `المعدل: ${fAvg.toFixed(2)} - ناجح 🎉` : `المعدل: ${fAvg.toFixed(2)} - ركز على البوتونليما ⚠️`;
+            const finalExamSection = document.getElementById('finalExamSection');
+            const buttonlemaExamSection = document.getElementById('buttonlemaExamSection');
+            
+            const finalGradeInput = document.getElementById('finalGrade');
+            const buttonlemaGradeInput = document.getElementById('buttonlemaGrade');
+
+            // 1. دالة لمنع الحروف والأزرار غير المرغوب بها تماماً
+            const blockInvalidChars = (e) => {
+                if (['e', 'E', '+', '-'].includes(e.key)) {
+                    e.preventDefault();
+                }
+            };
+
+            // 2. دالة التحقق الشديدة من صحة الأرقام المدخلة
+            const validateInput = (e) => {
+                let input = e.target;
                 
-                if (fAvg < 60) {
-                    document.getElementById('butunlemeSection').style.display = 'block';
-                    let bVal = document.getElementById('butunlemeScore').value;
-                    if (bVal !== '') {
-                        let bAvg = (kurulAvg * 0.6) + (parseFloat(bVal) * 0.4);
-                        document.getElementById('butunlemeResult').style.display = 'block';
-                        document.getElementById('butunlemeResult').className = bAvg >= 60 ? 'result-box success' : 'result-box danger';
-                        document.getElementById('butunlemeResult').innerHTML = bAvg >= 60 ? `المعدل النهائي: ${bAvg.toFixed(2)} - ناجح 🎉` : `المعدل النهائي: ${bAvg.toFixed(2)} - للأسف راسب ❌`;
+                if (input.value !== "") {
+                    // منع كتابة أكثر من 5 رموز لتفادي الأرقام الطويلة جداً (مثل 100.5)
+                    if (input.value.length > 5) {
+                        input.value = input.value.slice(0, 5);
+                    }
+
+                    let val = parseFloat(input.value);
+                    
+                    // إجبار الرقم على ألا يتجاوز 100
+                    if (val > 100) {
+                        input.value = 100;
+                    } 
+                    // إجبار الرقم على ألا يقل عن 0
+                    else if (val < 0) {
+                        input.value = 0;
                     }
                 }
-            }
-        }
+                
+                calculateResults(); // استدعاء الحساب بعد التأكد من نظافة الرقم
+            };
+
+            const generateKurulInputs = () => {
+                const count = parseInt(kurulCountSelect.value);
+                kurulInputsContainer.innerHTML = '';
+                
+                for (let i = 1; i <= count; i++) {
+                    const div = document.createElement('div');
+                    div.innerHTML = `
+                        <label for="coro${i}">كورول ${i}:</label>
+                        <input type="number" id="coro${i}" min="0" max="100" class="grade-input kurul-input" placeholder="0 - 100">
+                    `;
+                    kurulInputsContainer.appendChild(div);
+                }
+
+                // ربط دوال الحماية بكل حقل يتم توليده
+                document.querySelectorAll('.kurul-input').forEach(input => {
+                    input.addEventListener('input', validateInput);
+                    input.addEventListener('keypress', blockInvalidChars);
+                });
+                
+                calculateResults();
+            };
+
+            const calculateResults = () => {
+                resetResultSections();
+
+                const kurulInputs = Array.from(document.querySelectorAll('.kurul-input'));
+                const coroGrades = kurulInputs.map(input => parseFloat(input.value));
+                
+                if (coroGrades.some(isNaN)) return;
+
+                const averageCoro = coroGrades.reduce((sum, grade) => sum + grade, 0) / coroGrades.length;
+                coroResultEl.style.display = 'block';
+                
+                if (averageCoro >= 80) {
+                    coroResultEl.className = 'result-box success';
+                    coroResultEl.innerHTML = `متوسط الكورولات: <span class="result-value">${averageCoro.toFixed(2)}</span><br>🎉 ممتاز! النتيجة: <strong>ناجح وتستحق الإعفاء</strong>، لا توجد حاجة لدخول الفاينال.`;
+                    return;
+                }
+
+                finalExamSection.className = 'form-group visible-section';
+                const minFinalGrade = (60 - (0.60 * averageCoro)) / 0.40;
+                
+                if (minFinalGrade > 100) {
+                    coroResultEl.className = 'result-box danger';
+                    coroResultEl.innerHTML = `متوسط الكورولات: <span class="result-value">${averageCoro.toFixed(2)}</span><br>❌ حالة حرجة: تحتاج لدرجة <span class="result-value">${minFinalGrade.toFixed(2)}</span> في الفاينال وهذا مستحيل. <strong>أنت راسب حكماً بالفاينال</strong>.`;
+                    showButtonlema(minFinalGrade, averageCoro);
+                    return;
+                }
+
+                coroResultEl.className = 'result-box warning';
+                coroResultEl.innerHTML = `متوسط الكورولات: <span class="result-value">${averageCoro.toFixed(2)}</span><br>⚠️ تنبيه: وضعك الحالي غير آمن وبحاجة لدخول الفاينال! أقل درجة مطلوبة للنجاح هي: <span class="result-value">${minFinalGrade.toFixed(2)}</span>`;
+
+                const finalGrade = parseFloat(finalGradeInput.value);
+                if (isNaN(finalGrade)) return; 
+
+                const finalCombined = (0.60 * averageCoro) + (0.40 * finalGrade);
+                finalResultEl.style.display = 'block';
+
+                if (finalCombined >= 60) {
+                    finalResultEl.className = 'result-box success';
+                    finalResultEl.innerHTML = `معدلك النهائي الحالي: <span class="result-value">${finalCombined.toFixed(2)}</span><br>🎓 <strong>النتيجة: ناجح</strong> بنجاح وتفوق.`;
+                    return;
+                }
+
+                finalResultEl.className = 'result-box danger';
+                finalResultEl.innerHTML = `معدلك بعد الفاينال: <span class="result-value">${finalCombined.toFixed(2)}</span><br>للأسف لم تتجاوز عتبة النجاح في الفاينال.`;
+                showButtonlema(minFinalGrade, averageCoro);
+            };
+
+            const showButtonlema = (minReqGrade, averageCoro) => {
+                buttonlemaExamSection.className = 'form-group visible-section';
+                finalResultEl.innerHTML += `<br>أنت بحاجة لدخول البوتونليما. الدرجة المطلوبة لإنقاذ العام الدراسي هي: <span class="result-value">${minReqGrade.toFixed(2)}</span>`;
+
+                const buttonlemaGrade = parseFloat(buttonlemaGradeInput.value);
+                if (isNaN(buttonlemaGrade)) return;
+
+                const buttonlemaCombined = (0.60 * averageCoro) + (0.40 * buttonlemaGrade);
+                buttonlemaResultEl.style.display = 'block';
+
+                if (buttonlemaCombined >= 60) {
+                    buttonlemaResultEl.className = 'result-box success';
+                    buttonlemaResultEl.innerHTML = `المعدل النهائي بعد البوتونليما: <span class="result-value">${buttonlemaCombined.toFixed(2)}</span><br>🎓 <strong>النتيجة: ناجح</strong>، تم عبور السنة الدراسية بنجاح!`;
+                } else {
+                    buttonlemaResultEl.className = 'result-box danger';
+                    buttonlemaResultEl.innerHTML = `المعدل النهائي بعد البوتونليما: <span class="result-value">${buttonlemaCombined.toFixed(2)}</span><br>❌ <strong>النتيجة: راسب</strong>. حظاً أوفر في العام القادم.`;
+                }
+            };
+
+            const resetResultSections = () => {
+                [coroResultEl, finalResultEl, buttonlemaResultEl].forEach(el => {
+                    el.style.display = 'none';
+                    el.innerHTML = '';
+                    el.className = 'result-box';
+                });
+                finalExamSection.className = 'form-group hidden-section';
+                buttonlemaExamSection.className = 'form-group hidden-section';
+            };
+
+            const resetAll = () => {
+                document.querySelectorAll('.grade-input').forEach(input => input.value = '');
+                resetResultSections();
+                finalGradeInput.value = '';
+                buttonlemaGradeInput.value = '';
+            };
+
+            kurulCountSelect.addEventListener('change', () => {
+                resetAll();
+                generateKurulInputs();
+            });
+            
+            // ربط دوال الحماية بحقول الفاينال والبوتونليما أيضاً
+            finalGradeInput.addEventListener('input', validateInput);
+            finalGradeInput.addEventListener('keypress', blockInvalidChars);
+            
+            buttonlemaGradeInput.addEventListener('input', validateInput);
+            buttonlemaGradeInput.addEventListener('keypress', blockInvalidChars);
+            
+            resetBtn.addEventListener('click', resetAll);
+
+            generateKurulInputs();
+        });
     </script>
 </body>
 </html>
