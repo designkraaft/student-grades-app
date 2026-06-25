@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>حاسبة المعدل التراكمي | كلية الطب البشري</title>
     
+    <!-- استدعاء خط Cairo -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- مكتبة تأثيرات الاحتفال -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
         :root {
             --primary-color: #0ea5e9; 
@@ -50,6 +54,7 @@
             align-items: center;
             padding: 2rem 1rem;
             line-height: 1.6;
+            transition: all 0.3s ease;
         }
 
         .main-container {
@@ -61,12 +66,13 @@
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(10px);
+            position: relative;
         }
 
         .header-section {
             background: var(--primary-dark);
             color: white;
-            padding: 2rem;
+            padding: 3rem 2rem 2rem 2rem;
             text-align: center;
             position: relative;
         }
@@ -79,6 +85,36 @@
             right: 0;
             height: 4px;
             background: linear-gradient(90deg, #38bdf8, #0284c7);
+        }
+
+        /* زر تبديل اللغة بإعدادات الظهور الصحيحة */
+        .lang-switch {
+            position: absolute;
+            top: 15px;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        
+        [dir="rtl"] .lang-switch { left: 15px; right: auto; }
+        [dir="ltr"] .lang-switch { right: 15px; left: auto; }
+
+        .btn-lang {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-lang:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
         }
 
         h1 {
@@ -166,6 +202,7 @@
             background-color: white;
             transition: all 0.3s ease;
             outline: none;
+            cursor: pointer;
         }
 
         select:focus, input[type="number"]:focus {
@@ -216,7 +253,7 @@
 
         .visible-section {
             opacity: 1;
-            max-height: 500px;
+            max-height: 1200px;
             transform: translateY(0);
             margin-bottom: 1.5rem;
             padding: 1.5rem;
@@ -257,7 +294,7 @@
         }
 
         @media (max-width: 600px) {
-            .header-section { padding: 1.5rem 1rem; }
+            .header-section { padding: 4rem 1rem 1.5rem 1rem; }
             h1 { font-size: 1.6rem; }
             .content-section { padding: 1rem; }
             .grades-grid { grid-template-columns: repeat(2, 1fr); }
@@ -268,63 +305,128 @@
 <body>
 
     <div class="main-container">
+        
         <header class="header-section">
-            <h1>حاسبة المعدل التراكمي</h1>
-            <div class="university-title">مخصص لكلية الطب البشري - جامعة الراعي</div>
+            <!-- زر تغيير اللغة تم إضافته داخل الهيدر ليظهر دائماً -->
+            <div class="lang-switch">
+                <button id="btnToggleLang" class="btn-lang">🇹🇷 Türkçe</button>
+            </div>
+
+            <h1 data-i18n="title">حاسبة المعدل التراكمي</h1>
+            <div class="university-title" data-i18n="univ">مخصص لكلية الطب البشري - جامعة الراعي</div>
             <div class="turkish-title">Sağlık Bilimleri Üniversitesi - Çobanbey Tıp Fakültesi</div>
-            <div class="last-update">
-                🕒 آخر تحديث: 25 يونيو 2026، 11:39 مساءً
+            <div class="last-update" data-i18n="update">
+                🕒 آخر تحديث: 26 يونيو 2026
             </div>
         </header>
 
         <div class="content-section">
             <div class="form-group">
-                <div class="section-title">إعدادات السنة الدراسية</div>
-                <label for="kurulCount">كم عدد الكورولات (اللجان) في هذه السنة؟</label>
+                <div class="section-title" data-i18n="settingsTitle">تفاصيل السنة الدراسية</div>
+                <label for="kurulCount" data-i18n="kurulLabel">حدد عدد الكورولات لهي السنة:</label>
                 <select id="kurulCount">
-                    <option value="4">4 كورولات</option>
-                    <option value="5">5 كورولات</option>
-                    <option value="6" selected>6 كورولات</option>
-                    <option value="7">7 كورولات</option>
-                    <option value="8">8 كورولات</option>
+                    <option value="" disabled selected data-i18n="selectDefault">اختار عدد الكورولات لنبدأ...</option>
+                    <option value="4" data-i18n="k4">4 كورولات</option>
+                    <option value="5" data-i18n="k5">5 كورولات</option>
+                    <option value="6" data-i18n="k6">6 كورولات</option>
+                    <option value="7" data-i18n="k7">7 كورولات</option>
+                    <option value="8" data-i18n="k8">8 كورولات</option>
                 </select>
             </div>
 
-            <div class="form-group" id="kurulGroup">
-                <div class="section-title">أولاً: أدخل درجات الكورولات</div>
+            <div id="kurulGroup" class="form-group hidden-section">
+                <div class="section-title" data-i18n="kTitle">درجات الكورولات</div>
                 <div id="kurulInputsContainer" class="grades-grid">
-                    </div>
+                    <!-- التوليد التلقائي -->
+                </div>
             </div>
 
             <div id="coroResult" class="result-box"></div>
 
             <div id="finalExamSection" class="form-group hidden-section">
-                <div class="section-title">ثانياً: امتحان الفاينال (النهائي)</div>
-                <label for="finalGrade">أدخل الدرجة التي حصلت عليها في الفاينال:</label>
+                <div class="section-title" data-i18n="fTitle">امتحان الفاينال</div>
+                <label for="finalGrade" data-i18n="fLabel">سجل علامتك بالفاينال:</label>
                 <input type="number" id="finalGrade" min="0" max="100" class="grade-input final-input" placeholder="0 - 100">
             </div>
 
             <div id="finalResult" class="result-box"></div>
 
             <div id="buttonlemaExamSection" class="form-group hidden-section">
-                <div class="section-title" style="color: #ea580c;">ثالثاً: امتحان البوتونليما (التكميلي)</div>
-                <label for="buttonlemaGrade">أدخل درجة امتحان البوتونليما:</label>
+                <div class="section-title" style="color: #ea580c;" data-i18n="bTitle">امتحان البوتونليما (التكميلي)</div>
+                <label for="buttonlemaGrade" data-i18n="bLabel">سجل علامتك بالبوتونليما:</label>
                 <input type="number" id="buttonlemaGrade" min="0" max="100" class="grade-input btn-input" placeholder="0 - 100">
             </div>
 
             <div id="buttonlemaResult" class="result-box"></div>
 
-            <button id="resetBtn" class="btn-reset">إعادة تعيين وبدء حساب جديد ↻</button>
+            <button id="resetBtn" class="btn-reset" data-i18n="resetBtn">تصفير وحساب من جديد ↻</button>
         </div>
     </div>
 
-    <footer>
+    <footer data-i18n="footer">
         تم التصميم والتطوير بواسطة الطالب خلدون الحمدو &copy; 2026
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // -- إعدادات اللغة (قاموس الترجمة) --
+            let currentLang = 'ar';
+            const dict = {
+                title: { ar: "حاسبة المعدل التراكمي", tr: "Kurul Notu Hesaplayıcısı" },
+                univ: { ar: "مخصص لكلية الطب البشري - جامعة الراعي", tr: "Çobanbey Tıp Fakültesi İçin Özel Hazırlanmıştır" },
+                update: { ar: "🕒 آخر تحديث: 26 يونيو 2026", tr: "🕒 Son Güncelleme: 26 Haziran 2026" },
+                settingsTitle: { ar: "تفاصيل السنة الدراسية", tr: "Eğitim Yılı Bilgileri" },
+                kurulLabel: { ar: "حدد عدد الكورولات لهي السنة:", tr: "Bu yılki kurul sayısını seçin:" },
+                selectDefault: { ar: "اختار عدد الكورولات لنبدأ...", tr: "Başlamak için kurul sayısını seçin..." },
+                k4: { ar: "4 كورولات", tr: "4 Kurul" },
+                k5: { ar: "5 كورولات", tr: "5 Kurul" },
+                k6: { ar: "6 كورولات", tr: "6 Kurul" },
+                k7: { ar: "7 كورولات", tr: "7 Kurul" },
+                k8: { ar: "8 كورولات", tr: "8 Kurul" },
+                kTitle: { ar: "درجات الكورولات", tr: "Kurul Notları" },
+                fTitle: { ar: "امتحان الفاينال", tr: "Final Sınavı" },
+                fLabel: { ar: "سجل علامتك بالفاينال:", tr: "Final notunuzu girin:" },
+                bTitle: { ar: "امتحان البوتونليما (التكميلي)", tr: "Bütünleme Sınavı" },
+                bLabel: { ar: "سجل علامتك بالبوتونليما:", tr: "Bütünleme notunuzu girin:" },
+                resetBtn: { ar: "تصفير وحساب من جديد ↻", tr: "Sıfırla ve Yeniden Hesapla ↻" },
+                footer: { ar: "تم التصميم والتطوير بواسطة الطالب خلدون الحمدو &copy; 2026", tr: "Öğrenci Haldun Alhamdo tarafından tasarlanmış ve geliştirilmiştir &copy; 2026" }
+            };
+
+            const toggleLangBtn = document.getElementById('btnToggleLang');
+
+            const applyLanguage = () => {
+                document.documentElement.lang = currentLang;
+                document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+                toggleLangBtn.innerHTML = currentLang === 'ar' ? '🇹🇷 Türkçe' : '🇸🇾 العربية';
+
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (dict[key]) {
+                        if (el.tagName === 'OPTION') {
+                            el.innerText = dict[key][currentLang];
+                        } else {
+                            el.innerHTML = dict[key][currentLang];
+                        }
+                    }
+                });
+
+                if (kurulCountSelect.value !== "") {
+                    const values = Array.from(document.querySelectorAll('.kurul-input')).map(input => input.value);
+                    generateKurulInputs(false); 
+                    const inputs = document.querySelectorAll('.kurul-input');
+                    values.forEach((val, i) => { if(inputs[i]) inputs[i].value = val; });
+                    calculateResults();
+                }
+            };
+
+            toggleLangBtn.addEventListener('click', () => {
+                currentLang = currentLang === 'ar' ? 'tr' : 'ar';
+                applyLanguage();
+            });
+
+            // -- متغيرات الواجهة --
             const kurulCountSelect = document.getElementById('kurulCount');
+            const kurulGroup = document.getElementById('kurulGroup');
             const kurulInputsContainer = document.getElementById('kurulInputsContainer');
             const resetBtn = document.getElementById('resetBtn');
 
@@ -338,74 +440,119 @@
             const finalGradeInput = document.getElementById('finalGrade');
             const buttonlemaGradeInput = document.getElementById('buttonlemaGrade');
 
-            // 1. دالة لمنع الحروف والأزرار غير المرغوب بها تماماً
-            const blockInvalidChars = (e) => {
-                if (['e', 'E', '+', '-'].includes(e.key)) {
-                    e.preventDefault();
+            let hasCelebrated = false;
+
+            const triggerSuccessCelebration = () => {
+                if (typeof confetti !== 'undefined') {
+                    confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#0ea5e9', '#166534', '#fcd34d', '#f472b6'], zIndex: 9999 });
                 }
             };
 
-            // 2. دالة التحقق الشديدة من صحة الأرقام المدخلة
+            const checkCelebration = (isPassing) => {
+                if (isPassing && !hasCelebrated) {
+                    triggerSuccessCelebration();
+                    hasCelebrated = true; 
+                } else if (!isPassing) {
+                    hasCelebrated = false; 
+                }
+            };
+
+            const blockInvalidChars = (e) => {
+                if (['e', 'E', '+', '-', ' '].includes(e.key)) e.preventDefault();
+                if (e.key === '.' && e.target.value.includes('.')) e.preventDefault();
+                if (e.target.value === '100' && /^[0-9]$/.test(e.key)) e.preventDefault();
+            };
+
             const validateInput = (e) => {
                 let input = e.target;
-                
-                if (input.value !== "") {
-                    // منع كتابة أكثر من 5 رموز لتفادي الأرقام الطويلة جداً (مثل 100.5)
-                    if (input.value.length > 5) {
-                        input.value = input.value.slice(0, 5);
-                    }
-
-                    let val = parseFloat(input.value);
-                    
-                    // إجبار الرقم على ألا يتجاوز 100
-                    if (val > 100) {
-                        input.value = 100;
-                    } 
-                    // إجبار الرقم على ألا يقل عن 0
-                    else if (val < 0) {
-                        input.value = 0;
-                    }
+                if (input.validity && input.validity.badInput) {
+                    input.value = '';
+                    calculateResults();
+                    return;
                 }
-                
-                calculateResults(); // استدعاء الحساب بعد التأكد من نظافة الرقم
+                if (input.value !== "") {
+                    if (input.value.length > 5) input.value = input.value.slice(0, 5);
+                    let val = parseFloat(input.value);
+                    if (val > 100) input.value = 100;
+                    else if (val < 0) input.value = 0;
+                }
+                calculateResults(); 
             };
 
-            const generateKurulInputs = () => {
+            const generateKurulInputs = (shouldRecalculate = true) => {
                 const count = parseInt(kurulCountSelect.value);
+                if (isNaN(count)) return;
+
+                kurulGroup.className = 'form-group visible-section';
                 kurulInputsContainer.innerHTML = '';
                 
                 for (let i = 1; i <= count; i++) {
                     const div = document.createElement('div');
+                    const labelTxt = currentLang === 'ar' ? `كورول ${i}:` : `Kurul ${i}:`;
                     div.innerHTML = `
-                        <label for="coro${i}">كورول ${i}:</label>
+                        <label for="coro${i}">${labelTxt}</label>
                         <input type="number" id="coro${i}" min="0" max="100" class="grade-input kurul-input" placeholder="0 - 100">
                     `;
                     kurulInputsContainer.appendChild(div);
                 }
 
-                // ربط دوال الحماية بكل حقل يتم توليده
                 document.querySelectorAll('.kurul-input').forEach(input => {
                     input.addEventListener('input', validateInput);
-                    input.addEventListener('keypress', blockInvalidChars);
+                    input.addEventListener('keydown', blockInvalidChars);
                 });
                 
-                calculateResults();
+                if (shouldRecalculate) calculateResults();
+            };
+
+            const getMsg = (key, req = '') => {
+                const messages = {
+                    avg: { ar: "معدل الكورولات:", tr: "Kurul Ortalaması:" },
+                    passExempt: { 
+                        ar: `🎉 ألف مبروك! النتيجة: <strong>ناجح (معفى)</strong>، ما في داعي تدخل الفاينال.`, 
+                        tr: `🎉 Tebrikler! Sonuç: <strong>Başarılı (Muaf)</strong>, finale girmenize gerek yok.` 
+                    },
+                    failFinalImpos: { 
+                        ar: `❌ الوضع صعب شوي: محتاج تجيب <span class="result-value">${req}</span> بالفاينال وهالشي مستحيل. للأسف <strong>راسب بالفاينال حكماً</strong>.`, 
+                        tr: `❌ Durum kritik: Finalde <span class="result-value">${req}</span> almanız gerekiyor ve bu imkansız. Maalesef <strong>finalden kaldınız</strong>.` 
+                    },
+                    warnFinal: { 
+                        ar: `⚠️ انتبه: وضعك لسا مو بالسليم ولازم تدخل الفاينال! أقل علامة للنجاح هي: <span class="result-value">${req}</span>`, 
+                        tr: `⚠️ Dikkat: Henüz güvende değilsiniz ve finale girmeniz şart! Geçmek için minimum not: <span class="result-value">${req}</span>` 
+                    },
+                    finalCurrent: { ar: "معدلك النهائي صار:", tr: "Final sonrası ortalamanız:" },
+                    finalPass: { ar: "🎓 <strong>النتيجة: ناجح</strong>، ألف مبروك.", tr: "🎓 <strong>Sonuç: Başarılı</strong>, tebrikler." },
+                    finalFail: { ar: "للأسف ما قدرت تتجاوز الفاينال.", tr: "Maalesef finali geçemediniz." },
+                    reqButon: { 
+                        ar: `لازم تدخل البوتونليما. علامتك المطلوبة للنجاح هي: <span class="result-value">${req}</span>`, 
+                        tr: `Bütünlemeye girmeniz gerekiyor. Geçmek için gereken not: <span class="result-value">${req}</span>` 
+                    },
+                    butonFinal: { ar: "معدلك النهائي بعد البوتونليما:", tr: "Bütünleme sonrası ortalamanız:" },
+                    butonPass: { ar: "🎓 <strong>النتيجة: ناجح</strong>، خلصت السنة على خير!", tr: "🎓 <strong>Sonuç: Başarılı</strong>, yılı atlattınız!" },
+                    butonFail: { ar: "❌ <strong>النتيجة: راسب</strong>. معوضة إن شاء الله بالسنة الجاية.", tr: "❌ <strong>Sonuç: Başarısız</strong>. Seneye başarılar dileriz." }
+                };
+                return messages[key][currentLang];
             };
 
             const calculateResults = () => {
                 resetResultSections();
+                let isCurrentlyPassing = false; 
 
                 const kurulInputs = Array.from(document.querySelectorAll('.kurul-input'));
                 const coroGrades = kurulInputs.map(input => parseFloat(input.value));
                 
-                if (coroGrades.some(isNaN)) return;
+                if (coroGrades.some(isNaN) || coroGrades.length === 0) {
+                    checkCelebration(false);
+                    return;
+                }
 
                 const averageCoro = coroGrades.reduce((sum, grade) => sum + grade, 0) / coroGrades.length;
                 coroResultEl.style.display = 'block';
                 
                 if (averageCoro >= 80) {
                     coroResultEl.className = 'result-box success';
-                    coroResultEl.innerHTML = `متوسط الكورولات: <span class="result-value">${averageCoro.toFixed(2)}</span><br>🎉 ممتاز! النتيجة: <strong>ناجح وتستحق الإعفاء</strong>، لا توجد حاجة لدخول الفاينال.`;
+                    coroResultEl.innerHTML = `${getMsg('avg')} <span class="result-value">${averageCoro.toFixed(2)}</span><br>${getMsg('passExempt')}`;
+                    isCurrentlyPassing = true;
+                    checkCelebration(isCurrentlyPassing);
                     return;
                 }
 
@@ -414,47 +561,57 @@
                 
                 if (minFinalGrade > 100) {
                     coroResultEl.className = 'result-box danger';
-                    coroResultEl.innerHTML = `متوسط الكورولات: <span class="result-value">${averageCoro.toFixed(2)}</span><br>❌ حالة حرجة: تحتاج لدرجة <span class="result-value">${minFinalGrade.toFixed(2)}</span> في الفاينال وهذا مستحيل. <strong>أنت راسب حكماً بالفاينال</strong>.`;
+                    coroResultEl.innerHTML = `${getMsg('avg')} <span class="result-value">${averageCoro.toFixed(2)}</span><br>${getMsg('failFinalImpos', minFinalGrade.toFixed(2))}`;
                     showButtonlema(minFinalGrade, averageCoro);
                     return;
                 }
 
                 coroResultEl.className = 'result-box warning';
-                coroResultEl.innerHTML = `متوسط الكورولات: <span class="result-value">${averageCoro.toFixed(2)}</span><br>⚠️ تنبيه: وضعك الحالي غير آمن وبحاجة لدخول الفاينال! أقل درجة مطلوبة للنجاح هي: <span class="result-value">${minFinalGrade.toFixed(2)}</span>`;
+                coroResultEl.innerHTML = `${getMsg('avg')} <span class="result-value">${averageCoro.toFixed(2)}</span><br>${getMsg('warnFinal', minFinalGrade.toFixed(2))}`;
 
                 const finalGrade = parseFloat(finalGradeInput.value);
-                if (isNaN(finalGrade)) return; 
+                if (isNaN(finalGrade)) {
+                    checkCelebration(false);
+                    return; 
+                }
 
                 const finalCombined = (0.60 * averageCoro) + (0.40 * finalGrade);
                 finalResultEl.style.display = 'block';
 
                 if (finalCombined >= 60) {
                     finalResultEl.className = 'result-box success';
-                    finalResultEl.innerHTML = `معدلك النهائي الحالي: <span class="result-value">${finalCombined.toFixed(2)}</span><br>🎓 <strong>النتيجة: ناجح</strong> بنجاح وتفوق.`;
+                    finalResultEl.innerHTML = `${getMsg('finalCurrent')} <span class="result-value">${finalCombined.toFixed(2)}</span><br>${getMsg('finalPass')}`;
+                    isCurrentlyPassing = true;
+                    checkCelebration(isCurrentlyPassing);
                     return;
                 }
 
                 finalResultEl.className = 'result-box danger';
-                finalResultEl.innerHTML = `معدلك بعد الفاينال: <span class="result-value">${finalCombined.toFixed(2)}</span><br>للأسف لم تتجاوز عتبة النجاح في الفاينال.`;
+                finalResultEl.innerHTML = `${getMsg('finalCurrent')} <span class="result-value">${finalCombined.toFixed(2)}</span><br>${getMsg('finalFail')}`;
                 showButtonlema(minFinalGrade, averageCoro);
             };
 
             const showButtonlema = (minReqGrade, averageCoro) => {
                 buttonlemaExamSection.className = 'form-group visible-section';
-                finalResultEl.innerHTML += `<br>أنت بحاجة لدخول البوتونليما. الدرجة المطلوبة لإنقاذ العام الدراسي هي: <span class="result-value">${minReqGrade.toFixed(2)}</span>`;
+                finalResultEl.innerHTML += `<br>${getMsg('reqButon', minReqGrade.toFixed(2))}`;
 
                 const buttonlemaGrade = parseFloat(buttonlemaGradeInput.value);
-                if (isNaN(buttonlemaGrade)) return;
+                if (isNaN(buttonlemaGrade)) {
+                    checkCelebration(false);
+                    return;
+                }
 
                 const buttonlemaCombined = (0.60 * averageCoro) + (0.40 * buttonlemaGrade);
                 buttonlemaResultEl.style.display = 'block';
 
                 if (buttonlemaCombined >= 60) {
                     buttonlemaResultEl.className = 'result-box success';
-                    buttonlemaResultEl.innerHTML = `المعدل النهائي بعد البوتونليما: <span class="result-value">${buttonlemaCombined.toFixed(2)}</span><br>🎓 <strong>النتيجة: ناجح</strong>، تم عبور السنة الدراسية بنجاح!`;
+                    buttonlemaResultEl.innerHTML = `${getMsg('butonFinal')} <span class="result-value">${buttonlemaCombined.toFixed(2)}</span><br>${getMsg('butonPass')}`;
+                    checkCelebration(true);
                 } else {
                     buttonlemaResultEl.className = 'result-box danger';
-                    buttonlemaResultEl.innerHTML = `المعدل النهائي بعد البوتونليما: <span class="result-value">${buttonlemaCombined.toFixed(2)}</span><br>❌ <strong>النتيجة: راسب</strong>. حظاً أوفر في العام القادم.`;
+                    buttonlemaResultEl.innerHTML = `${getMsg('butonFinal')} <span class="result-value">${buttonlemaCombined.toFixed(2)}</span><br>${getMsg('butonFail')}`;
+                    checkCelebration(false);
                 }
             };
 
@@ -469,27 +626,30 @@
             };
 
             const resetAll = () => {
-                document.querySelectorAll('.grade-input').forEach(input => input.value = '');
+                kurulCountSelect.value = ""; 
+                kurulGroup.className = 'form-group hidden-section'; 
+                kurulInputsContainer.innerHTML = '';
+                hasCelebrated = false;
                 resetResultSections();
                 finalGradeInput.value = '';
                 buttonlemaGradeInput.value = '';
             };
 
             kurulCountSelect.addEventListener('change', () => {
-                resetAll();
+                resetResultSections();
+                finalGradeInput.value = '';
+                buttonlemaGradeInput.value = '';
+                hasCelebrated = false;
                 generateKurulInputs();
             });
             
-            // ربط دوال الحماية بحقول الفاينال والبوتونليما أيضاً
             finalGradeInput.addEventListener('input', validateInput);
-            finalGradeInput.addEventListener('keypress', blockInvalidChars);
+            finalGradeInput.addEventListener('keydown', blockInvalidChars);
             
             buttonlemaGradeInput.addEventListener('input', validateInput);
-            buttonlemaGradeInput.addEventListener('keypress', blockInvalidChars);
+            buttonlemaGradeInput.addEventListener('keydown', blockInvalidChars);
             
             resetBtn.addEventListener('click', resetAll);
-
-            generateKurulInputs();
         });
     </script>
 </body>
